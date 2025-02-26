@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="Images/favicon.png" type="image/x-icon">
+    <title>Student Registration</title>
+    <style>
+        body{
+            background-color: #f6f8fb;
+        }
+        .container {
+            margin: 0;
+            font-size: 15px;
+            padding: 0;
+            font-family: 'DM sans' sans-serif ;
+        }
+        .email-container {
+            max-width: 700px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 70px;
+            border: 1px solid #7A3596;
+        }
+        .logo {
+            text-align: center;
+            margin-top: 50px ;
+            margin-bottom: 20px;
+        }
+        .logo img {
+            height: 150px;
+            margin-top: 30px;
+        }
+        .header {
+            text-align: center;
+            font-size: 28px;
+            color: #5a5858;
+            font-family: Georgia, Arial, Helvetica, sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+        .dates {
+            text-align: center;
+            font-size: 9px;
+            color: #999893;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+        }
+        .details-table {
+            width: 100%;
+            max-width: 620px;
+            margin: 0 auto;
+            border-collapse: collapse;
+        }
+        .details-table td {
+            padding: 10px;
+            border: 3px solid white;
+            color: #5a5858;
+        }
+        .footer {
+            font-size: 13px;
+            font-style: italic;
+            color: #777777;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <a href="#" target="_blank">
+                <img src="Images/zenwellneslounge.png" alt="logo" class="CToWUd" data-bit="iit">
+            </a>
+        </div>
+        <div class="email-container" >
+            
+            <br>
+            <div style="text-align: center;color: #777777;">
+                <td colspan="2">
+                    <h1 style="color:#7A3596;">Thank You !</h1>
+                    <p style="font-size:20px; margin-top:30px; color:#7A3596; text-align: center; line-height:1.5;" ><span id="name" style="font-weight: bold;"></span> is registered for the <span id="interestedtopics" style="font-weight: bold;"></span> in ZenWellnessLounge.</p>
+                </td>
+            </div><br><br>
+            <table class="details-table">
+                <tr style="background: #f5f5f5;"><td>Name</td><td id="name"></td></tr>
+                <tr style="background: #f5f5f5;"><td>Email Address</td><td id="emailaddress"></td></tr>
+                <tr style="background: #f5f5f5;"><td>Department</td><td id="department"></td></tr>
+                <tr style="background: #f5f5f5;"><td>Year of Entry</td><td id="yearofentry"></td></tr>
+                <tr style="background: #f5f5f5;"><td>Interested Topics</td><td id="interestedtopics"></td></tr>
+                <tr style="background: #f5f5f5;"><td>University</td><td id="university"></td></tr>
+            </table>
+        </div>
+        <div style="text-align: center;padding: 50px 0 0 0;">
+            Explore our latest insights <span id="interestedtopics" ></span> at <a href="https://zenwellnesslounge.com/" style="color: #7A3596;">zenwellnesslounge.com</a>.
+            
+        </div>
+        <div style="text-align: center;padding: 10px 0 50px 0;">
+            If you have any questions, feel free to contact us at <br> <a href="mailto:viji.zenwellnesslounge@gmail.com" target="_blank" style="color: #7A3596;">vjjj.zenwellnesslounge@gmail.com</a>  or <a href="mailto:swapna.zenwellnesslounge.com@gmail.com" target="_blank" style="color: #7A3596;"> swapma.zenwellnesslounge@gmail.com</a>
+            
+        </div>
+    </div>
+    <script>
+        // Example data object
+        const registrationDetails = {
+            name:"Kaviya",
+            emailaddress:"kaviya123@gmail.com",
+            department:"BE.Tech IT",
+            yearofentry:"2025",
+            interestedtopics:"Career Guidence",
+            university: "IIT Kanpur",
+        };
+
+        // Function to update the registration details
+        function updateRegistrationDetails(details) {
+            document.querySelectorAll('#name').forEach(el => {
+                el.textContent = details.name;
+            });
+            document.getElementById('emailaddress').textContent = details.emailaddress;
+            document.getElementById('department').textContent = details.department;
+            document.getElementById('yearofentry').textContent = details.yearofentry;
+            document.querySelectorAll('#interestedtopics').forEach(el => {
+                el.textContent = details.interestedtopics;
+            });
+            document.getElementById('university').textContent = details.university;
+        }
+
+        // Call the function with the example data
+        updateRegistrationDetails(registrationDetails);
+    </script>
+</body>
+</html>
