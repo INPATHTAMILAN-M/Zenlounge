@@ -14,19 +14,14 @@ class Category(models.Model):
 
 # Sessions
 class Event(models.Model):
-    LOUNGE_TYPES = [
-        ('online', 'Online'),
-        ('offline', 'Offline'),
-    ]
-
     title = models.CharField(max_length=255)
     description = models.TextField()
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     lounge_type = models.ForeignKey(Category, on_delete=models.CASCADE)
-    event_type = models.CharField(max_length=10, choices=LOUNGE_TYPES)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    duration = models.IntegerField(help_text="Duration in minutes")
+    from_timee = models.TimeField()
+    to_time = models.TimeField()
     session_link = models.URLField(blank=True, null=True)
     moderator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     thumbnail = models.ImageField(upload_to='thumbnails/')
