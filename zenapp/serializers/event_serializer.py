@@ -15,6 +15,7 @@ class EventListSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class EventGetSerializer(serializers.ModelSerializer):
+    lounge_type = CategorySerializer(read_only=True)
     class Meta:
         model = Event
         fields = '__all__'

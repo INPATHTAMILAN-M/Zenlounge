@@ -12,14 +12,17 @@ from .views import (
     PasswordResetConfirmView,
     
 )
-from .viewset import UniversityViewSet,IntrestedTopicViewSet, CustomUserViewSet,PaymentGatewayViewSet
-
+from .viewset import (
+    UniversityViewSet,IntrestedTopicViewSet, 
+    CustomUserViewSet,PaymentGatewayViewSet,GroupViewSet
+)
 router = DefaultRouter()
 
 router.register(r'universities', UniversityViewSet)
 router.register(r'interested-topics', IntrestedTopicViewSet)
 router.register(r'users', CustomUserViewSet)
 router.register(r'payment-gateways', PaymentGatewayViewSet)
+router.register(r'groups', GroupViewSet)
 
 
 
