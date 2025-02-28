@@ -19,3 +19,17 @@ Access Swagger UI at `http://localhost:8000/
 - Profile management
 - Password reset
 - Token refresh
+- Payment Gateway management
+- Event management
+- Coupon management
+- Customer Support management
+- Zoom Meeting Attendance management
+
+## New Features
+- Added PaymentGateway model and serializer
+- Added Event model and serializer
+- Added Coupon model and serializer
+- Added CustomerSupport model and serializer
+- Added ZoomMeetingAttendance model and serializer
+- Added filters for all models
+- Updated README.md file to include new features
