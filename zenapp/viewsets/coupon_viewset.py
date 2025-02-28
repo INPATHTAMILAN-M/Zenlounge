@@ -4,7 +4,7 @@ from ..serializers.coupon_serializer import CouponGetSerializer, CouponCreateSer
 from ..filters import CouponFilter
 
 class CouponViewSet(viewsets.ModelViewSet):
-    queryset = Coupon.objects.all()
+    queryset = Coupon.objects.all().order_by('-id')
     serializer_class = CouponListSerializer
     permission_classes = [permissions.IsAuthenticated]
     http_method_names = ['get', 'post','patch', 'delete']

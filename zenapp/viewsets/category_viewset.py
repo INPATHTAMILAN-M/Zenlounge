@@ -10,7 +10,7 @@ from ..serializers import (
 from ..filters import CategoryFilter
 
 class CategoryViewSet(viewsets.ModelViewSet):
-    queryset = Category.objects.all()
+    queryset = Category.objects.all().order_by('-id')
     serializer_class = CategoryListSerializer
     permission_classes = [permissions.IsAuthenticated]
     http_method_names = ['get', 'post','patch', 'delete']
