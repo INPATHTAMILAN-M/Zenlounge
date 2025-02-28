@@ -16,6 +16,7 @@ class CategoryPatchSerializer(serializers.ModelSerializer):
         model = Category
         fields = '__all__'
 
+
 class CategoryListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Category

@@ -1,6 +1,6 @@
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import get_user_model
-from django.core.mail import send_mail
+# from django.core.mail import send_mail
 from django.shortcuts import get_object_or_404
 from django.conf import settings
 from rest_framework.views import APIView
@@ -11,6 +11,7 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny
 from rest_framework.parsers import JSONParser
 from .serializers import PasswordResetSerializer, PasswordConfirmSerializer, UserSignupSerializer
+from .utils.email_sender import send_email
 
 User = get_user_model()
 
@@ -36,6 +37,7 @@ class UserProfileAPIView(generics.RetrieveUpdateAPIView):
 class PasswordResetRequestView(APIView):
     permission_classes = [AllowAny]
     parser_classes = [JSONParser]
+    serializer_class = PasswordResetSerializer
 
     def post(self, request):
         serializer = PasswordResetSerializer(data=request.data)
@@ -45,15 +47,16 @@ class PasswordResetRequestView(APIView):
 
             # Generate password reset token
             token = default_token_generator.make_token(user)
+            print(token)
+            print(user.pk)
             reset_url = f"{settings.FRONTEND_URL}/reset-password/{user.pk}/{token}/"
 
             # Send email
-            send_mail(
+            send_email(
                 "Reset Your Password",
-                f"Click the link below to reset your password:\n{reset_url}",
                 settings.DEFAULT_FROM_EMAIL,
-                [email],
-                fail_silently=False,
+                'password_reset.html',
+                {"url": reset_url},
             )
 
             return Response({"message": "Password reset link sent to your email."}, status=status.HTTP_200_OK)
@@ -66,11 +69,13 @@ class PasswordResetConfirmView(APIView):
     API for confirming and setting a new password.
     """
     permission_classes = [AllowAny]
+    serializer_class = PasswordConfirmSerializer
 
-    def post(self, request, uid, token):
+
+    def post(self, request, uidb64, token):
         serializer = PasswordConfirmSerializer(data=request.data)
         if serializer.is_valid():
-            user = get_object_or_404(User, pk=uid)
+            user = get_object_or_404(User, pk=uidb64)
 
             # Verify token
             if not default_token_generator.check_token(user, token):

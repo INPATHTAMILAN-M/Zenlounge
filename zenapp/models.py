@@ -12,20 +12,19 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-# Sessions
 class Event(models.Model):
     title = models.CharField(max_length=255)
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
     start_date = models.DateTimeField()
     end_date = models.DateTimeField()
     lounge_type = models.ForeignKey(Category, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    from_timee = models.TimeField()
-    to_time = models.TimeField()
-    session_link = models.URLField(blank=True, null=True)
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    session_link = models.URLField(blank=True, null=True,max_length=500)
     moderator = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
-    thumbnail = models.ImageField(upload_to='thumbnails/')
-    seat_count = models.PositiveIntegerField()
+    thumbnail = models.ImageField(upload_to='thumbnails/', null=True, blank=True)    
+    seat_count = models.IntegerField(blank=True, null=True)
     is_featured = models.BooleanField(default=False)
 
     def __str__(self):
@@ -35,10 +34,18 @@ class Event(models.Model):
 class EventRegistration(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_status = models.CharField(max_length=20, default='Pending')
     registration_date = models.DateTimeField(auto_now_add=True)
 
+    def save(self, *args, **kwargs):
+        if not self.amount:
+            self.amount = self.event.price
+        super().save(*args, **kwargs)
+
     def __str__(self):
-        return f"Registration for {self.event.title} by {self.user.email}"
+        return f"Registration for {self.event.title} by {self.user.email}"    
+
 
 # Event Logs
 class EventLog(models.Model):
@@ -55,6 +62,7 @@ class EventLog(models.Model):
 
     def __str__(self):
         return f"Event Log {self.meeting_id} - {self.username}"
+
 
 # Zoom Meeting Attendance
 class ZoomMeetingAttendance(models.Model):
@@ -75,7 +83,7 @@ class ZoomMeetingAttendance(models.Model):
 # Payments
 class Payment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    registration = models.ForeignKey(EventRegistration, on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     payment_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=[('pending', 'Pending'), ('completed', 'Completed'), ('failed', 'Failed')])

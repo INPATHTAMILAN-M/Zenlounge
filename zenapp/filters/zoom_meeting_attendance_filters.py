@@ -1,5 +1,5 @@
 from django_filters import rest_framework as filters
-from ...zenapp.models import ZoomMeetingAttendance
+from zenapp.models import ZoomMeetingAttendance
 
 class ZoomMeetingAttendanceFilter(filters.FilterSet):
     class Meta:

@@ -1,4 +1,6 @@
 from rest_framework import viewsets, permissions
+from django_filters.rest_framework import DjangoFilterBackend
+from ..filters.event_filters import EventFilter
 from ..models import Event
 from ..serializers.event_serializer import (
     EventCreateSerializer,
@@ -11,6 +13,8 @@ class EventViewSet(viewsets.ModelViewSet):
     queryset = Event.objects.all()
     serializer_class = EventListSerializer
     permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DjangoFilterBackend]
+    filterset_class = EventFilter
     http_method_names = ['get', 'post','patch', 'delete']
 
     def get_serializer_class(self):

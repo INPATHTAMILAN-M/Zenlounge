@@ -1,5 +1,5 @@
 from django_filters import rest_framework as filters
-from ...zenapp.models import Coupon
+from zenapp.models import Coupon
 
 class CouponFilter(filters.FilterSet):
     class Meta:

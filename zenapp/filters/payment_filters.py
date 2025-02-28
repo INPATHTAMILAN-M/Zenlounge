@@ -1,5 +1,5 @@
 from django_filters import rest_framework as filters
-from ...zenapp.models import Payment
+from zenapp.models import Payment
 
 class PaymentFilter(filters.FilterSet):
     class Meta:
