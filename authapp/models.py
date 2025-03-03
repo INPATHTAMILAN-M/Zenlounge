@@ -1,7 +1,7 @@
 
 from django.contrib.auth.models import AbstractUser, UserManager
 from django.db import models
-
+from django.contrib.auth.models import BaseUserManager
 
 class University(models.Model):
     name = models.CharField(max_length=100, unique=True)
@@ -21,7 +21,7 @@ class IntrestedTopic(models.Model):
     def __str__(self):
         return self.topic
 
-from django.contrib.auth.models import BaseUserManager
+
 
 class CustomUserManager(BaseUserManager):
     """
@@ -82,7 +82,7 @@ class CustomUser(AbstractUser):
 
 class PaymentGateway(models.Model):
     name = models.CharField(max_length=100)
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
     secret_key = models.CharField(max_length=255)
     public_key = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
