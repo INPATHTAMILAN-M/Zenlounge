@@ -81,8 +81,21 @@ class CustomUser(AbstractUser):
 
 
 class PaymentGateway(models.Model):
-    name = models.CharField(max_length=100)
+    GATEWAY_CHOICES = [
+        ("razorpay", "Razorpay"),
+        ("ccavenue", "CCAvenue"),
+        ("stripe", "Stripe"),
+        ("paypal", "PayPal"),
+    ]
+
+    name = models.CharField(max_length=100, unique=True, choices=GATEWAY_CHOICES)
     description = models.TextField(null=True, blank=True)
-    secret_key = models.CharField(max_length=255)
-    public_key = models.CharField(max_length=255)
+    credentials = models.JSONField()  # Stores gateway-specific credentials as JSON
     is_active = models.BooleanField(default=True)
+
+    def get_credentials(self):
+        """Returns credentials dictionary."""
+        return self.credentials
+
+    def __str__(self):
+        return self.name

@@ -1,5 +1,6 @@
 from django.urls import path, include
 from rest_framework import routers
+from .views import PaymentVerificationView
 from . import viewsets
 
 router = routers.DefaultRouter()
@@ -14,4 +15,5 @@ router.register(r'customer-supports', viewsets.CustomerSupportViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
+    path("verify-payment/", PaymentVerificationView.as_view(), name="verify_payment"),
 ]

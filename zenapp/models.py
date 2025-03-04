@@ -4,6 +4,8 @@ from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 import uuid
 
+from authapp.models import PaymentGateway
+
 # Lounge Categories
 class Category(models.Model):
     name = models.CharField(max_length=255)
@@ -85,12 +87,19 @@ class ZoomMeetingAttendance(models.Model):
 class Payment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     registration = models.ForeignKey(EventRegistration, on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)    
     payment_date = models.DateTimeField(auto_now_add=True)
+    payment_gateway = models.ForeignKey(PaymentGateway, on_delete=models.CASCADE)
+    currency = models.CharField(max_length=5, default='INR')
     status = models.CharField(max_length=20, choices=[('pending', 'Pending'), ('completed', 'Completed'), ('failed', 'Failed')])
 
     def __str__(self):
         return f"Payment {self.id} - {self.user.email}"
+    
+    def save(self, *args, **kwargs):
+        if not self.amount:
+            self.amount = self.registration.amount
+        super().save(*args, **kwargs)
 
 # Coupons & Discounts
 class Coupon(models.Model):

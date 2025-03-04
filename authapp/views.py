@@ -47,16 +47,14 @@ class PasswordResetRequestView(APIView):
 
             # Generate password reset token
             token = default_token_generator.make_token(user)
-            print(token)
-            print(user.pk)
             reset_url = f"{settings.FRONTEND_URL}/reset-password/{user.pk}/{token}/"
 
             # Send email
             send_email(
-                "Reset Your Password",
-                settings.DEFAULT_FROM_EMAIL,
-                'password_reset.html',
-                {"url": reset_url},
+                subject="Reset Your Password",
+                to_email=user.email,
+                template_name='password_reset.html',
+                context={"url": reset_url},
             )
 
             return Response({"message": "Password reset link sent to your email."}, status=status.HTTP_200_OK)
@@ -84,6 +82,13 @@ class PasswordResetConfirmView(APIView):
             # Set new password
             user.set_password(serializer.validated_data["new_password"])
             user.save()
+            login_url = f"{settings.FRONTEND_URL}/login/"
+            send_email(
+                subject="Password Reset Successful",
+                to_email=user.email,
+                template_name='password_reset_confirm.html',
+                context={"login_url": login_url},
+            )
 
             return Response({"message": "Password has been reset successfully."}, status=status.HTTP_200_OK)
 
