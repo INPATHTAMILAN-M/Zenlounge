@@ -6,3 +6,4 @@ from .customer_support_serializer import *
 from .coupon_serializer import *
 from .payment_serializer import *
 from .category_serializer import *
+from .verification_serializer import *
