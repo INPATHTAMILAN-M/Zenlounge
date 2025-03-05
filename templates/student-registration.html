@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="Images/favicon.png" type="image/x-icon">
+    <link rel="icon" href="{% static 'Images/favicon.png' %}" type="image/x-icon">
     <title>Student Registration</title>
     <style>
         body{
@@ -71,7 +71,7 @@
     <div class="container">
         <div class="logo">
             <a href="#" target="_blank">
-                <img src="Images/zenwellneslounge.png" alt="logo" class="CToWUd" data-bit="iit">
+                <img src="{% static 'Images/zenwellneslounge.png' %}" alt="logo" class="CToWUd" data-bit="iit">
             </a>
         </div>
         <div class="email-container" >
@@ -80,54 +80,26 @@
             <div style="text-align: center;color: #777777;">
                 <td colspan="2">
                     <h1 style="color:#7A3596;">Thank You !</h1>
-                    <p style="font-size:20px; margin-top:30px; color:#7A3596; text-align: center; line-height:1.5;" ><span id="name" style="font-weight: bold;"></span> is registered for the <span id="interestedtopics" style="font-weight: bold;"></span> in ZenWellnessLounge.</p>
+                    <p style="font-size:20px; margin-top:30px; color:#7A3596; text-align: center; line-height:1.5;" ><span style="font-weight: bold;">{{ name }}</span> is registered for the <span style="font-weight: bold;">{{ interestedtopics }}</span> in ZenWellnessLounge.</p>
                 </td>
             </div><br><br>
             <table class="details-table">
-                <tr style="background: #f5f5f5;"><td>Name</td><td id="name"></td></tr>
-                <tr style="background: #f5f5f5;"><td>Email Address</td><td id="emailaddress"></td></tr>
-                <tr style="background: #f5f5f5;"><td>Department</td><td id="department"></td></tr>
-                <tr style="background: #f5f5f5;"><td>Year of Entry</td><td id="yearofentry"></td></tr>
-                <tr style="background: #f5f5f5;"><td>Interested Topics</td><td id="interestedtopics"></td></tr>
-                <tr style="background: #f5f5f5;"><td>University</td><td id="university"></td></tr>
+                <tr style="background: #f5f5f5;"><td>Name</td><td>{{ name }}</td></tr>
+                <tr style="background: #f5f5f5;"><td>Email Address</td><td>{{ emailaddress }}</td></tr>
+                <tr style="background: #f5f5f5;"><td>Department</td><td>{{ department }}</td></tr>
+                <tr style="background: #f5f5f5;"><td>Year of Entry</td><td>{{ yearofentry }}</td></tr>
+                <tr style="background: #f5f5f5;"><td>Interested Topics</td><td>{{ interestedtopics }}</td></tr>
+                <tr style="background: #f5f5f5;"><td>University</td><td>{{ university }}</td></tr>
             </table>
         </div>
         <div style="text-align: center;padding: 50px 0 0 0;">
-            Explore our latest insights <span id="interestedtopics" ></span> at <a href="https://zenwellnesslounge.com/" style="color: #7A3596;">zenwellnesslounge.com</a>.
+            Explore our latest insights {{ interestedtopics }} at <a href="https://zenwellnesslounge.com/" style="color: #7A3596;">zenwellnesslounge.com</a>.
             
         </div>
         <div style="text-align: center;padding: 10px 0 50px 0;">
-            If you have any questions, feel free to contact us at <br> <a href="mailto:viji.zenwellnesslounge@gmail.com" target="_blank" style="color: #7A3596;">vjjj.zenwellnesslounge@gmail.com</a>  or <a href="mailto:swapna.zenwellnesslounge.com@gmail.com" target="_blank" style="color: #7A3596;"> swapma.zenwellnesslounge@gmail.com</a>
+            If you have any questions, feel free to contact us at <br> <a href="mailto:viji.zenwellnesslounge@gmail.com" target="_blank" style="color: #7A3596;">viji.zenwellnesslounge@gmail.com</a>  or <a href="mailto:swapna.zenwellnesslounge.com@gmail.com" target="_blank" style="color: #7A3596;"> swapma.zenwellnesslounge@gmail.com</a>
             
         </div>
     </div>
-    <script>
-        // Example data object
-        const registrationDetails = {
-            name:"Kaviya",
-            emailaddress:"kaviya123@gmail.com",
-            department:"BE.Tech IT",
-            yearofentry:"2025",
-            interestedtopics:"Career Guidence",
-            university: "IIT Kanpur",
-        };
-
-        // Function to update the registration details
-        function updateRegistrationDetails(details) {
-            document.querySelectorAll('#name').forEach(el => {
-                el.textContent = details.name;
-            });
-            document.getElementById('emailaddress').textContent = details.emailaddress;
-            document.getElementById('department').textContent = details.department;
-            document.getElementById('yearofentry').textContent = details.yearofentry;
-            document.querySelectorAll('#interestedtopics').forEach(el => {
-                el.textContent = details.interestedtopics;
-            });
-            document.getElementById('university').textContent = details.university;
-        }
-
-        // Call the function with the example data
-        updateRegistrationDetails(registrationDetails);
-    </script>
 </body>
 </html>

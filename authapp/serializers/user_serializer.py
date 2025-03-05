@@ -3,7 +3,7 @@ from authapp.models import CustomUser
 from django.contrib.auth.models import Group
 from ..models import IntrestedTopic
 from zenapp.models import EventRegistration
-
+from authapp.utils.email_sender import send_email
 
 class EveventRegistrationSerializer(serializers.ModelSerializer):
     class Meta:
