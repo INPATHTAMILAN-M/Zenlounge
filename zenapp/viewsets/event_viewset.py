@@ -28,6 +28,11 @@ class EventViewSet(viewsets.ModelViewSet):
         elif self.action == 'update' or self.action == 'partial_update':
             return EventPatchSerializer
         return EventListSerializer
+    
+    def get_permissions(self):
+        if self.action == 'list':
+            return []
+        return super().get_permissions()
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
