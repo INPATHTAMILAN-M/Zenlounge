@@ -6,10 +6,14 @@ from zenapp.models import EventRegistration
 from authapp.utils.email_sender import send_email
 
 class EveventRegistrationSerializer(serializers.ModelSerializer):
+    event_title = serializers.SerializerMethodField()
+
     class Meta:
         model = EventRegistration
         fields = '__all__'
 
+    def get_event_title(self, obj):
+        return obj.event.title
 
 class CustomUserCreateSerializer(serializers.ModelSerializer):
     groups = serializers.PrimaryKeyRelatedField(
@@ -77,9 +81,15 @@ class CustomUserListSerializer(serializers.ModelSerializer):
         return obj.event_registrations.count()  # Assuming event_registrations is a related name or field on CustomUser
 
 class CustomUserDetailSerializer(serializers.ModelSerializer):
+    group_name = serializers.SerializerMethodField()
     event_registrations = EveventRegistrationSerializer(many=True, read_only=True)
+
     class Meta:
         model = CustomUser
         fields = ['id', 'email', 'username', 'phone_number', 'address', 'date_of_birth',
                   'university', 'intrested_topics', 'year_of_entry', 'profile_picture',
-                  'groups','event_registrations','date_joined']
+                  'groups', 'event_registrations', 'date_joined', 'group_name']
+
+    def get_group_name(self, obj):
+        group_names = [group.name for group in obj.groups.all()]
+        return ', '.join(group_names)

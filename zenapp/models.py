@@ -29,7 +29,8 @@ class Event(models.Model):
     seat_count = models.IntegerField(blank=True, null=True)
     is_featured = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
-
+    created_on =  models.DateTimeField(auto_now_add=True)
+    
     def __str__(self):
         return self.title
 
@@ -37,8 +38,10 @@ class Event(models.Model):
 class EventRegistration(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,related_name='event_registrations')
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
-    payment_status = models.CharField(max_length=20, default='Pending')
+    registration_id = models.CharField(max_length=10,unique=True,null=True,blank=True)
+    registration_status = models.CharField(max_length=20, choices=[('Pending', 'Pending'), ('Completed', 'Completed'), ('Failed', 'Failed')], default='Pending')
+    amount = models.DecimalField(max_digits=10, decimal_places=2, null=True,blank=True)
+    payment_status = models.CharField(max_length=20, default='Pending', null=True,blank=True)
     registration_date = models.DateTimeField(auto_now_add=True)
 
     def save(self, *args, **kwargs):

@@ -87,10 +87,6 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'zenlounge.urls'
 
-CORS_ALLOWED_ORIGINS = [
-    "https://vqbv6q92-8000.inc1.devtunnels.ms",
-]
-
 USE_X_FORWARDED_HOST = True
 
 CORS_ALLOW_ALL_ORIGINS = True
