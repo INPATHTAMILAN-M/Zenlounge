@@ -38,16 +38,16 @@ class Event(models.Model):
 class EventRegistration(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='event_registrations')
-    registration_id = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    registration_status = models.CharField(max_length=20, choices=[('Pending', 'Pending'), ('Completed', 'Completed'), ('Failed', 'Failed')], default='Pending')
+    registration_id = models.CharField(max_length=100, default='REGIS' + str(uuid.uuid4().int)[:6],null=True,blank=True)    
+    registration_status = models.CharField(max_length=20, choices=[('Pending', 'Pending'), ('Completed', 'Completed'), ('Failed', 'Failed')], default='Completed')
     # amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     # payment_status = models.CharField(max_length=20, default='Pending', null=True, blank=True)
     registration_date = models.DateTimeField(auto_now_add=True)
 
-    def save(self, *args, **kwargs):
-        if not self.amount:
-            self.amount = self.event.price
-        super().save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if not self.amount:
+    #         self.amount = self.event.price
+    #     super().save(*args, **kwargs)
 
     def __str__(self):
         return f"Registration for {self.event.title} by {self.user.email}"    

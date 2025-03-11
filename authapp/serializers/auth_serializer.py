@@ -23,18 +23,20 @@ class UserSignupSerializer(serializers.ModelSerializer):
             "year_of_entry",
             "work",
             "profile_picture",
+            "year_of_graduation",
             "country",
             "is_open_to_be_mentor",
-            "is_alumni"
+            "is_alumni"  # Added is_alumni to the fields list
         ]
 
     def create(self, validated_data):
         # Hash the password before saving the user
         validated_data["password"] = make_password(validated_data["password"])
+        alumni = validated_data.pop("is_alumni", None)  # Remove is_alumni from validated_data
         user = CustomUser.objects.create(**validated_data)
 
         # Assign user to a default group (Students or Professors)
-        if validated_data.get("is_alumni"):
+        if alumni:
             group, _ = Group.objects.get_or_create(name="Alumni")
         else:
             group, _ = Group.objects.get_or_create(name="Student")

@@ -27,7 +27,7 @@ class UserRegistrationAPIView(APIView):
         serializer = UserSignupSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response({"message": "User Created Successfully"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UserProfileAPIView(generics.RetrieveUpdateAPIView):
@@ -48,6 +48,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         user = serializer.user
         token_response = super().post(request, *args, **kwargs)
         token_response.data['user_id'] = user.id
+        token_response.data['group'] = user.groups.values_list('name', flat=True)
         return token_response
     
 class PasswordResetRequestView(APIView):
