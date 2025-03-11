@@ -65,7 +65,7 @@ class CustomUser(AbstractUser):
     date_of_birth = models.DateField(blank=True, null=True)
     university = models.ForeignKey(University, on_delete=models.CASCADE, blank=True, null=True)
     department = models.CharField(max_length=100, blank=True, null=True)
-    intrested_topics = models.ManyToManyField(IntrestedTopic,blank=True)
+    intrested_topics = models.CharField(max_length=200, blank=True, null=True)
     year_of_entry = models.IntegerField(blank=True, null=True)
     work = models.CharField(max_length=100, blank=True, null=True)
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
