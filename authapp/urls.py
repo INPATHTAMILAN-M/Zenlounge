@@ -15,7 +15,8 @@ from .views import (
 )
 from .viewset import (
     UniversityViewSet,IntrestedTopicViewSet, 
-    CustomUserViewSet,PaymentGatewayViewSet,GroupViewSet
+    CustomUserViewSet,PaymentGatewayViewSet,GroupViewSet,
+    CountryViewSet
 )
 router = DefaultRouter()
 
@@ -24,6 +25,7 @@ router.register(r'interested-topics', IntrestedTopicViewSet)
 router.register(r'users', CustomUserViewSet)
 router.register(r'payment-gateways', PaymentGatewayViewSet)
 router.register(r'groups', GroupViewSet)
+router.register(r'countries', CountryViewSet)
 
 
 
