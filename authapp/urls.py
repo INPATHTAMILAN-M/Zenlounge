@@ -6,6 +6,7 @@ from rest_framework_simplejwt.views import (
     TokenBlacklistView,
 )
 from .views import (
+    CustomTokenObtainPairView,
     UserRegistrationAPIView,
     UserProfileAPIView,
     PasswordResetRequestView,
@@ -29,7 +30,7 @@ router.register(r'groups', GroupViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path('signup/', UserRegistrationAPIView.as_view(), name='signup_user'),
-    path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('login/', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('logout/', TokenBlacklistView.as_view(), name='logout'),
     path('profile/', UserProfileAPIView.as_view(), name='profile'),

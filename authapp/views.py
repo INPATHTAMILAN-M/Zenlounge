@@ -12,7 +12,10 @@ from rest_framework.permissions import AllowAny
 from rest_framework.parsers import JSONParser
 from .serializers import PasswordResetSerializer, PasswordConfirmSerializer, UserSignupSerializer
 from .utils.email_sender import send_email
-
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework.response import Response
+from rest_framework import status
 User = get_user_model()
 
 
@@ -34,6 +37,19 @@ class UserProfileAPIView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         return self.request.user
 
+class CustomTokenObtainPairView(TokenObtainPairView):
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        try:
+            serializer.is_valid(raise_exception=True)
+        except Exception as e:
+            return Response({"detail": str(e)}, status=status.HTTP_401_UNAUTHORIZED)
+        
+        user = serializer.user
+        token_response = super().post(request, *args, **kwargs)
+        token_response.data['user_id'] = user.id
+        return token_response
+    
 class PasswordResetRequestView(APIView):
     permission_classes = [AllowAny]
     parser_classes = [JSONParser]
