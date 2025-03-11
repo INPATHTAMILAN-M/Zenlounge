@@ -18,10 +18,14 @@ class UserSignupSerializer(serializers.ModelSerializer):
             "address",
             "date_of_birth",
             "university",
+            "department",
             "intrested_topics",
             "year_of_entry",
+            "work",
             "profile_picture",
-            'is_alumni'
+            "country",
+            "is_open_to_be_mentor",
+            "is_alumni"
         ]
 
     def create(self, validated_data):
