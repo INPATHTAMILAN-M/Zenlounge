@@ -76,7 +76,7 @@ class CustomUserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'email', 'username', 'phone_number', 'address', 'date_of_birth', 
-                  'university', 'intrested_topics', 'year_of_entry', 'profile_picture', 
+                  'university', 'intrested_topics', 'year_of_entry', 'profile_picture', 'department',
                   'groups', 'event_registrations_count','date_joined']
 
     def get_event_registrations_count(self, obj):
@@ -88,7 +88,7 @@ class CustomUserDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['id', 'email', 'username', 'phone_number', 'address', 'date_of_birth',
+        fields = ['id', 'email', 'username', 'phone_number', 'address', 'date_of_birth','department',
                   'university', 'intrested_topics', 'year_of_entry', 'profile_picture',
                   'groups', 'event_registrations', 'date_joined', 'group_name']
 
