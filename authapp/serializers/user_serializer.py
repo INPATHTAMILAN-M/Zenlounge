@@ -56,14 +56,16 @@ class CustomUserUpdateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         groups = validated_data.pop('groups', instance.groups.all())
-        intrested_topics = validated_data.pop('intrested_topics', instance.intrested_topics.all())
+        intrested_topics = validated_data.pop('intrested_topics', instance.intrested_topics.all() if instance.intrested_topics else [])
         
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         
         instance.save()
         instance.groups.set(groups)  # Assign groups
-        instance.intrested_topics.set(intrested_topics)  # Assign interested topics
+
+        if intrested_topics:
+            instance.intrested_topics.set(intrested_topics)  # Assign interested topics
         
         return instance
 
