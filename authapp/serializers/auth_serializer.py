@@ -31,7 +31,10 @@ class UserSignupSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         # Hash the password before saving the user
-        validated_data["password"] = make_password(validated_data["password"])
+        print(validated_data)
+        print("password",validated_data["password"])
+        
+        
         alumni = validated_data.pop("is_alumni", None)  # Remove is_alumni from validated_data
         user = CustomUser.objects.create(**validated_data)
 

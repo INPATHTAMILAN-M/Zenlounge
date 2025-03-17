@@ -46,6 +46,9 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             return Response({"detail": str(e)}, status=status.HTTP_401_UNAUTHORIZED)
         
         user = serializer.user
+        if user.groups.filter(name='Alumni').exists():
+            return Response({"detail": "You do not have permission."}, status=status.HTTP_403_FORBIDDEN)
+        
         token_response = super().post(request, *args, **kwargs)
         token_response.data['user_id'] = user.id
         token_response.data['group'] = user.groups.values_list('name', flat=True)

@@ -4,6 +4,10 @@ from django.contrib.auth.models import Group
 from ..models import IntrestedTopic
 from zenapp.models import EventRegistration
 from authapp.utils.email_sender import send_email
+from django.contrib.auth.tokens import default_token_generator
+from django.conf import settings
+import random
+import string
 
 class EveventRegistrationSerializer(serializers.ModelSerializer):
     event_title = serializers.SerializerMethodField()
@@ -32,11 +36,39 @@ class CustomUserCreateSerializer(serializers.ModelSerializer):
         ]
 
     def create(self, validated_data):
-        groups = validated_data.pop('groups', [])
-        intrested_topics = validated_data.pop('intrested_topics', [])
+        groups = validated_data.pop('groups', None) or []
+        intrested_topics = validated_data.pop('intrested_topics', None) or []
+
+        # Generate a random 6-character alphanumeric password
+        password = ''.join(random.choices(string.ascii_letters + string.digits, k=6))
+        validated_data['password'] = password
+
         user = CustomUser.objects.create(**validated_data)
-        user.groups.set(groups)  # Assign groups
-        user.intrested_topics.set(intrested_topics)  # Assign interested topics
+        user.set_password(password)  # Set the generated password
+        user.save()
+
+        if groups:
+            user.groups.set(groups)
+        if intrested_topics:
+            user.intrested_topics.set(intrested_topics)
+
+        # Check if the user is in the Alumni group
+        is_alumni = any(group.name == 'Alumni' for group in user.groups.all())
+
+        if not is_alumni:
+            reset_url = f"{settings.FRONTEND_URL}/login/"
+
+            send_email(
+                subject="Your Account Created",
+                to_email=user.email,
+                template_name='welcome_email.html',
+                context={
+                    "username": user.username,
+                    "email": user.email,
+                    "password": password,
+                    "url": reset_url
+                },
+            )
         return user
 
 

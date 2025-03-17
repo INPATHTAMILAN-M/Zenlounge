@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Your Account Details</title>
+</head>
+<body>
+    <h1>Welcome to Zenlounge!</h1>
+    <p>Dear {{ username }},</p>
+    <p>Your account has been successfully created. Here are your account details:</p>
+    <ul>
+        <li><strong>Email:</strong> {{ email }}</li>
+        <li><strong>Password:</strong> {{ password }}</li>
+    </ul>
+    <p>You can log in using the following link:</p>
+    <p><a href="{{ url }}">Login to your account</a></p>
+    <p>Thank you for joining us!</p>
+    <p>Best regards,<br/>The Zenlounge Team</p>
+</body>
+</html>
