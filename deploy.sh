@@ -5,8 +5,8 @@ echo "Pulling latest changes from Git..."
 git pull || { echo "Git pull failed. Exiting."; exit 1; }
 
 # Restart the wwwgunicorn service
-echo "Restarting the genlounge service..."
-sudo systemctl restart genlounge || { echo "Failed to restart wwgenloungewgunicorn. Exiting."; exit 1; }
+echo "Restarting the zenlounge service..."
+sudo systemctl restart zenlounge || { echo "Failed to restart zenlounge. Exiting."; exit 1; }
 
 # Restart the daemon service
 echo "Restarting the daemon service..."
