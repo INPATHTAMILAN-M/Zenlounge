@@ -5,7 +5,8 @@ from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import Group
 
 class UserSignupSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, required=True, min_length=6, validators=[validate_password])
+    password = serializers.CharField(write_only=True, required=True, min_length=6, 
+                                     validators=[validate_password])
     is_alumni = serializers.BooleanField(default=False)
 
     class Meta:
