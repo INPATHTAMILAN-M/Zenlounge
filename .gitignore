@@ -12,3 +12,4 @@ __init__.py
 # db.sqlite3
 /staticfiles/
 media/
+/static_files/
