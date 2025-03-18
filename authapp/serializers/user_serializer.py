@@ -43,8 +43,8 @@ class CustomUserCreateSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = [
             'email', 'username', 'phone_number', 'address', 'date_of_birth',
-            'university', 'intrested_topics', 'year_of_entry', 'profile_picture',
-            'groups','department'
+            'university', 'intrested_topics', 'year_of_entry', 'profile_picture','country',
+            'groups','department','work','year_of_graduation','is_open_to_be_mentor'
         ]
 
     def create(self, validated_data):
@@ -88,8 +88,8 @@ class CustomUserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'email', 'username', 'phone_number', 'address', 'date_of_birth', 
-                  'university', 'intrested_topics', 'year_of_entry', 'profile_picture',
-                  'groups','department']
+                  'university', 'intrested_topics', 'year_of_entry', 'profile_picture','country',
+                  'groups','department','work','year_of_graduation','is_open_to_be_mentor']
 
     def update(self, instance, validated_data):
         groups = validated_data.pop('groups', instance.groups.all())
