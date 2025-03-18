@@ -23,9 +23,7 @@ class CustomUserCreateSerializer(serializers.ModelSerializer):
     groups = serializers.PrimaryKeyRelatedField(
         queryset=Group.objects.all(), many=True, required=False
     )
-    intrested_topics = serializers.PrimaryKeyRelatedField(
-        queryset=IntrestedTopic.objects.all(), many=True, required=False
-    )
+
 
     class Meta:
         model = CustomUser
@@ -37,9 +35,7 @@ class CustomUserCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         groups = validated_data.pop('groups', None) or []
-        intrested_topics = validated_data.pop('intrested_topics', None) or []
 
-        # Generate a random 6-character alphanumeric password
         password = ''.join(random.choices(string.ascii_letters + string.digits, k=6))
         validated_data['password'] = password
 
@@ -49,10 +45,7 @@ class CustomUserCreateSerializer(serializers.ModelSerializer):
 
         if groups:
             user.groups.set(groups)
-        if intrested_topics:
-            user.intrested_topics.set(intrested_topics)
 
-        # Check if the user is in the Alumni group
         is_alumni = any(group.name == 'Alumni' for group in user.groups.all())
 
         if not is_alumni:
@@ -76,9 +69,7 @@ class CustomUserUpdateSerializer(serializers.ModelSerializer):
     groups = serializers.PrimaryKeyRelatedField(
         queryset=Group.objects.all(), many=True, required=False
     )
-    intrested_topics = serializers.PrimaryKeyRelatedField(
-        queryset=IntrestedTopic.objects.all(), many=True, required=False
-    )
+
 
     class Meta:
         model = CustomUser
@@ -88,7 +79,6 @@ class CustomUserUpdateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         groups = validated_data.pop('groups', instance.groups.all())
-        intrested_topics = validated_data.pop('intrested_topics', instance.intrested_topics.all() if instance.intrested_topics else [])
         
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
@@ -96,8 +86,6 @@ class CustomUserUpdateSerializer(serializers.ModelSerializer):
         instance.save()
         instance.groups.set(groups)  # Assign groups
 
-        if intrested_topics:
-            instance.intrested_topics.set(intrested_topics)  # Assign interested topics
         
         return instance
 
