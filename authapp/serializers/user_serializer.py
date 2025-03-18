@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from authapp.models import CustomUser
 from django.contrib.auth.models import Group
-from ..models import IntrestedTopic
+from ..models import Country, IntrestedTopic, University
 from zenapp.models import EventRegistration
 from authapp.utils.email_sender import send_email
 from django.contrib.auth.tokens import default_token_generator
@@ -9,6 +9,20 @@ from django.conf import settings
 import random
 import string
 
+class CountrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Country
+        fields = ['id', 'name', 'code']
+
+class UniversitySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = University
+        fields = '__all__'
+        
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['id', 'name']
 class EveventRegistrationSerializer(serializers.ModelSerializer):
     event_title = serializers.SerializerMethodField()
 
@@ -30,7 +44,7 @@ class CustomUserCreateSerializer(serializers.ModelSerializer):
         fields = [
             'email', 'username', 'phone_number', 'address', 'date_of_birth',
             'university', 'intrested_topics', 'year_of_entry', 'profile_picture',
-            'groups'
+            'groups','department'
         ]
 
     def create(self, validated_data):
@@ -74,8 +88,8 @@ class CustomUserUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = ['id', 'email', 'username', 'phone_number', 'address', 'date_of_birth', 
-                  'university', 'intrested_topics', 'year_of_entry', 'profile_picture', 
-                  'groups']
+                  'university', 'intrested_topics', 'year_of_entry', 'profile_picture',
+                  'groups','department']
 
     def update(self, instance, validated_data):
         groups = validated_data.pop('groups', instance.groups.all())
@@ -92,26 +106,32 @@ class CustomUserUpdateSerializer(serializers.ModelSerializer):
 class CustomUserListSerializer(serializers.ModelSerializer):
     groups = serializers.StringRelatedField(many=True)
     event_registrations_count = serializers.SerializerMethodField()
-
+    university = UniversitySerializer()
+    country = CountrySerializer()
     class Meta:
         model = CustomUser
         fields = ['id', 'email', 'username', 'phone_number', 'address', 'date_of_birth', 
                   'university', 'intrested_topics', 'year_of_entry', 'profile_picture', 'department',
-                  'groups', 'event_registrations_count','date_joined']
+                  'groups', 'event_registrations_count','date_joined', 'country','work','year_of_graduation','is_open_to_be_mentor']
 
     def get_event_registrations_count(self, obj):
         return obj.event_registrations.count()  # Assuming event_registrations is a related name or field on CustomUser
 
 class CustomUserDetailSerializer(serializers.ModelSerializer):
-    group_name = serializers.SerializerMethodField()
-    event_registrations = EveventRegistrationSerializer(many=True, read_only=True)
 
+    event_registrations = EveventRegistrationSerializer(many=True, read_only=True)
+    university = UniversitySerializer()
+    country = CountrySerializer()
+    group = serializers.SerializerMethodField() 
+    
     class Meta:
         model = CustomUser
         fields = ['id', 'email', 'username', 'phone_number', 'address', 'date_of_birth','department',
                   'university', 'intrested_topics', 'year_of_entry', 'profile_picture',
-                  'groups', 'event_registrations', 'date_joined', 'group_name']
+                  'groups', 'event_registrations', 'date_joined', 'country', 'group','work','year_of_graduation','is_open_to_be_mentor']
 
-    def get_group_name(self, obj):
-        group_names = [group.name for group in obj.groups.all()]
-        return ', '.join(group_names)
+    def get_group(self, obj):
+        group = obj.groups.first() 
+        if group:
+            return {'id': group.id, 'name': group.name}
+        return None 
