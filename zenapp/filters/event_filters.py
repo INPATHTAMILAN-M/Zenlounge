@@ -6,13 +6,12 @@ from datetime import timedelta
 
 class EventFilter(filters.FilterSet):
     is_future = django_filters.BooleanFilter(method='filter_is_future')
-    pagination = django_filters.BooleanFilter()
 
     class Meta:
         model = Event
         fields = ['title', 'start_date', 'end_date', 'description', 'title', 
                   'description', 'start_date', 'end_date', 'lounge_type', 
-                  'price', 'start_time', 'end_time', 'moderator', 'seat_count', 'is_featured', 'pagination']
+                  'price', 'start_time', 'end_time', 'moderator', 'seat_count', 'is_featured']
     
     def filter_is_future(self, queryset, name, value):
         now = timezone.now()

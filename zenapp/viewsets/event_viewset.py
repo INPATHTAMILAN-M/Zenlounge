@@ -41,7 +41,7 @@ class EventViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def list(self, request, *args, **kwargs):
-        page_param = request.query_params.get('pagitation', None)
+        page_param = request.query_params.get('pagination', None)
         if page_param == 'false':
             self.pagination_class = None
         else:
