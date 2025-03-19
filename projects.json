@@ -1,0 +1,131 @@
+{
+    "servers": [
+        {
+            "name": "PADANI",
+            "host": "64.227.146.5",
+            "projects": {
+                "frontend": [
+                    "html",
+                    "padane-shadcn"
+                ],
+                "backend": [
+                    "PADANE",
+                    "padane"
+                ]
+            }
+        },
+        {
+            "name": "134.209.148.230",
+            "host": "134.209.148.230",
+            "projects": {
+                "frontend": [
+                    "alumni_portal",
+                    "html",
+                    "skillcrayons",
+                    "zen-frnt"
+                ],
+                "backend": [
+                    "Zen-bck",
+                    "alumini.conf",
+                    "backup_61022.sql",
+                    "compass",
+                    "cor.karpagamtech.conf",
+                    "crampchamp",
+                    "result_management",
+                    "skillcryons.conf"
+                ]
+            }
+        },
+        {
+            "name": "CHIT",
+            "host": "43.205.162.126",
+            "projects": {
+                "frontend": [
+                    "html"
+                ],
+                "backend": [
+                    "chit",
+                    "schemes.sreethangamjewellery.com.csr",
+                    "schemes.sreethangamjewellery.com.key",
+                    "stj.com",
+                    "stj.crt",
+                    "ubuntu"
+                ]
+            }
+        },
+        {
+            "name": "64.227.130.151",
+            "host": "64.227.130.151",
+            "projects": {
+                "frontend": [
+                    "html",
+                    "media"
+                ],
+                "backend": [
+                    "29072024_kpr_ias.sql",
+                    "backup_2332022.sql",
+                    "repute",
+                    "sammy",
+                    "virtualenv.py"
+                ]
+            }
+        },
+        {
+            "name": "159.65.156.20",
+            "host": "159.65.156.20",
+            "projects": {
+                "frontend": [
+                    "CRM-main",
+                    "CRM-main-1",
+                    "Gyanodhayam",
+                    "Gyanodhayam-old",
+                    "KH-Job_Portal-main",
+                    "b-k-s",
+                    "bksfabrics",
+                    "careers.karpagamhospital.in",
+                    "civil-techno-tab-main",
+                    "civil-version-1",
+                    "civil-version-2",
+                    "decoder",
+                    "decodeschool",
+                    "html",
+                    "index.html",
+                    "kahe",
+                    "kcpalumni-main",
+                    "replan-main",
+                    "repute-ad",
+                    "telently-new-main"
+                ],
+                "backend": [
+                    "aluminienv",
+                    "alumni_portal",
+                    "civiltechnolab",
+                    "civiltechnolab_new",
+                    "iruenv",
+                    "irugapatru",
+                    "jobportalenv",
+                    "karpagamdrug",
+                    "mmhrc.in.pem",
+                    "pnr",
+                    "private.key",
+                    "repute",
+                    "wewonderwomen",
+                    "wwwenv"
+                ]
+            }
+        },
+        {
+            "name": "142.93.217.128",
+            "host": "142.93.217.128",
+            "projects": {
+                "frontend": [
+                    "html"
+                ],
+                "backend": [
+                    "data.txt",
+                    "saleor"
+                ]
+            }
+        }
+    ]
+}
