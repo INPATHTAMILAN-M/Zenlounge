@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from zenapp.models import Event, Category, EventRegistration
+from django.utils.timezone import now
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -33,24 +34,51 @@ class EventCreateSerializer(serializers.ModelSerializer):
         model = Event
         fields = '__all__'
 
+    def validate_start_date(self, value):
+        """Ensure start_date is not in the past."""
+        if value < now():
+            raise serializers.ValidationError("Start date cannot be in the past.")
+        return value
+
+    def validate_end_date(self, value):
+        """Ensure end_date is not in the past."""
+        if value < now():
+            raise serializers.ValidationError("End date cannot be in the past.")
+        return value
+
+    def validate(self, data):
+        """Ensure end_date is not before start_date."""
+        start_date = data.get('start_date')
+        end_date = data.get('end_date')
+
+        if start_date and end_date and end_date < start_date:
+            raise serializers.ValidationError({"end_date": "End date cannot be before start date."})
+
+        return data
+
 class EventPatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = '__all__'
 
+    def validate_start_date(self, value):
+        """Ensure start_date is not in the past."""
+        if value < now():
+            raise serializers.ValidationError("Start date cannot be in the past.")
+        return value
+
+    def validate_end_date(self, value):
+        """Ensure end_date is not in the past."""
+        if value < now():
+            raise serializers.ValidationError("End date cannot be in the past.")
+        return value
+
     def validate(self, data):
-        # Ensure end_time is not before start_time
-        start_time = data.get('start_time', self.instance.start_time if self.instance else None)
-        end_time = data.get('end_time', self.instance.end_time if self.instance else None)
+        """Ensure end_date is not before start_date."""
+        start_date = data.get('start_date', getattr(self.instance, 'start_date', None))
+        end_date = data.get('end_date', getattr(self.instance, 'end_date', None))
 
-        if start_time and end_time and end_time < start_time:
-            raise serializers.ValidationError("End time cannot be before start time.")
-
-        # Ensure start_time and end_time are not in the past during update
-        if self.instance:  # Only check during updates
-            if start_time and start_time < self.instance.start_time:
-                raise serializers.ValidationError("Start time cannot be in the past.")
-            if end_time and end_time < self.instance.end_time:
-                raise serializers.ValidationError("End time cannot be in the past.")
+        if start_date and end_date and end_date < start_date:
+            raise serializers.ValidationError({"end_date": "End date cannot be before start date."})
 
         return data
