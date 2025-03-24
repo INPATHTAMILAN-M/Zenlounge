@@ -17,8 +17,8 @@ class Category(models.Model):
 class Event(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
+    start_date = models.DateField()
+    end_date = models.DateField()
     lounge_type = models.ForeignKey(Category, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     start_time = models.TimeField()
