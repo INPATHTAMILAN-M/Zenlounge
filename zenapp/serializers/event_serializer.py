@@ -58,8 +58,41 @@ class EventCreateSerializer(serializers.ModelSerializer):
 
         return value
 
+    def validate_start_time(self, value):
+        """Ensure start_time is valid and not in the past if today."""
+        if isinstance(value, str):  # Convert string to time if needed
+            value = datetime.strptime(value, "%H:%M:%S").time()
+
+        start_date = self.initial_data.get("start_date")
+        if start_date:
+            if isinstance(start_date, str):
+                start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
+
+            if start_date == now().date() and value < now().time():
+                raise serializers.ValidationError("Start time cannot be in the past for today's events.")
+
+        return value
+
+    def validate_end_time(self, value):
+        """Ensure end_time is after start_time if on the same day."""
+        if isinstance(value, str):  # Convert string to time if needed
+            value = datetime.strptime(value, "%H:%M:%S").time()
+
+        start_date = self.initial_data.get("start_date")
+        end_date = self.initial_data.get("end_date")
+        start_time = self.initial_data.get("start_time")
+
+        if start_time:
+            if isinstance(start_time, str):
+                start_time = datetime.strptime(start_time, "%H:%M:%S").time()
+
+            if start_date and end_date and start_date == end_date and value < start_time:
+                raise serializers.ValidationError("End time cannot be before start time on the same day.")
+
+        return value
+
     def validate(self, data):
-        """Ensure time and date constraints are met."""
+        """Ensure all time and date constraints are met."""
         start_date = data.get('start_date')
         end_date = data.get('end_date')
         start_time = data.get('start_time')
@@ -68,7 +101,7 @@ class EventCreateSerializer(serializers.ModelSerializer):
         current_date = now().date()
         current_time = now().time()
 
-        # Convert strings to date/time objects
+        # Convert strings to date/time objects if needed
         if isinstance(start_date, str):
             start_date = datetime.strptime(start_date, "%Y-%m-%d").date()
         if isinstance(end_date, str):
@@ -83,10 +116,10 @@ class EventCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({"end_date": "End date cannot be before start date."})
 
         # Ensure start time is not in the past if start date is today
-        if start_date and start_date == current_date and start_time and start_time < current_time:
-            raise serializers.ValidationError({"start_time": "Start time cannot be in the past."})
+        if start_date == current_date and start_time and start_time < current_time:
+            raise serializers.ValidationError({"start_time": "Start time cannot be in the past for today's events."})
 
-        # Ensure end_time is not before start_time on the same date
+        # Ensure end time is not before start time on the same date
         if start_date and end_date and start_date == end_date and start_time and end_time and end_time < start_time:
             raise serializers.ValidationError({"end_time": "End time cannot be before start time on the same day."})
 
