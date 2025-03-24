@@ -3,6 +3,7 @@ from authapp.models import CustomUser
 from django.contrib.auth.password_validation import validate_password
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import Group
+from authapp.utils.email_sender import send_email 
 
 class UserSignupSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=True, min_length=6, 
@@ -30,12 +31,22 @@ class UserSignupSerializer(serializers.ModelSerializer):
             "is_alumni"  # Added is_alumni to the fields list
         ]
 
+    def send_registration_email(self, user):
+        """Send Registration Confirmation Email"""
+        profile = CustomUser.objects.get(id=user.id)
+        context = {
+            "name": user.username,
+            "emailaddress": user.email,
+            "department": profile.department if profile.department else None,
+            "yearofentry": profile.year_of_entry if profile.year_of_entry else None,
+            # "interestedtopics": profile.interested_topics if profile.interested_topics else None,
+            # "university": profile.university if profile.university else None
+        }
+        template = "student-registration.html" if user.groups.filter(name__iexact="Student").exists() else "alumni-registration.html"
+        send_email(subject="Registration Successful", to_email=user.email, template_name=template, context=context)
+
     def create(self, validated_data):
-        # Hash the password before saving the user
-        print(validated_data)
-        print("password",validated_data["password"])
-        
-        
+
         alumni = validated_data.pop("is_alumni", None)  # Remove is_alumni from validated_data
         user = CustomUser.objects.create(**validated_data)
 
@@ -46,6 +57,7 @@ class UserSignupSerializer(serializers.ModelSerializer):
             group, _ = Group.objects.get_or_create(name="Student")
             
         user.groups.add(group)
+        self.send_registration_email(user)
 
         return user
 
