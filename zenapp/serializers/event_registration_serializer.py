@@ -41,7 +41,7 @@ class EventRegistrationCreateSerializer(serializers.ModelSerializer):
         for event_id in event_ids:
             if EventRegistration.objects.filter(event_id=event_id, user=user).exists():
                 event = Event.objects.get(id=event_id)
-                raise serializers.ValidationError(f"{user.username} is already registered for the event: {event.title}.")
+                raise serializers.ValidationError(f"{user.username} is already registered for the event: {event.title} visit profile to see more details.")
 
             registration = EventRegistration.objects.create(
                 event=Event.objects.get(id=event_id),

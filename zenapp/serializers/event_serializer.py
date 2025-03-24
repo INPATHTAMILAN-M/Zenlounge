@@ -37,3 +37,20 @@ class EventPatchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = '__all__'
+
+    def validate(self, data):
+        # Ensure end_time is not before start_time
+        start_time = data.get('start_time', self.instance.start_time if self.instance else None)
+        end_time = data.get('end_time', self.instance.end_time if self.instance else None)
+
+        if start_time and end_time and end_time < start_time:
+            raise serializers.ValidationError("End time cannot be before start time.")
+
+        # Ensure start_time and end_time are not in the past during update
+        if self.instance:  # Only check during updates
+            if start_time and start_time < self.instance.start_time:
+                raise serializers.ValidationError("Start time cannot be in the past.")
+            if end_time and end_time < self.instance.end_time:
+                raise serializers.ValidationError("End time cannot be in the past.")
+
+        return data
