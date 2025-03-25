@@ -43,7 +43,7 @@ class EventRegistration(models.Model):
     registration_status = models.CharField(
         max_length=20,
         choices=[('Pending', 'Pending'), ('Completed', 'Completed'), ('Failed', 'Failed')],
-        default='Pending'
+        default='Completed'
     )
     registration_date = models.DateTimeField(auto_now_add=True)
 
