@@ -5,6 +5,15 @@ from zenapp.serializers.event_serializer import CategorySerializer
 from authapp.utils.email_sender import send_email  
 from django.db import transaction
 
+
+class EventRegistrationSerializer(serializers.ModelSerializer):
+    event = serializers.StringRelatedField()  # Example: Use the event's `__str__` representation
+    user = serializers.StringRelatedField()
+    class Meta:
+        model = EventRegistration
+        fields = ['id', 'event', 'user', 'registration_status', 'registration_date']
+
+
 class EventRegistrationCreateSerializer(serializers.ModelSerializer):
     event = serializers.ListField(child=serializers.IntegerField(), write_only=True)
     user = serializers.PrimaryKeyRelatedField(queryset=CustomUser.objects.all(), write_only=True)
@@ -12,7 +21,7 @@ class EventRegistrationCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = EventRegistration
         fields = '__all__'
-            
+
     def validate_user(self, value):
         if value.groups.filter(name__iexact='admin').exists():
             raise serializers.ValidationError("Admins cannot register for events.")
@@ -22,25 +31,29 @@ class EventRegistrationCreateSerializer(serializers.ModelSerializer):
         event_ids = validated_data.pop('event')
         user = validated_data.pop('user')
 
-        events = Event.objects.filter(id__in=event_ids)  # Fetch all events at once
-
-        if not events.exists():  # Ensure events list is not empty
+        events = Event.objects.filter(id__in=event_ids)
+        if not events.exists():
             raise serializers.ValidationError("No valid events found for registration.")
 
         registrations = []
+        
+        for event in events:
+            if EventRegistration.objects.filter(event=event, user=user).exists():
+                raise serializers.ValidationError(f"Already registered for {event.title}.")
 
-        with transaction.atomic():  # Ensures all or nothing
-            for event in events:
-                if EventRegistration.objects.filter(event=event, user=user).exists():
-                    raise serializers.ValidationError(
-                        f"{user.username} is already registered for the event: {event.title}. "
-                        "Visit profile to see more details."
-                    )
+            # Create the registration instance
+            registration = EventRegistration.objects.create(event=event, user=user, **validated_data)
+            registration.refresh_from_db()  # Ensure auto-generated fields are populated
 
-                registration = EventRegistration.objects.create(event=event, user=user, **validated_data)
-                registrations.append(registration)
+            # Debugging: Print the registration_id to verify it is being set
+            print(f"Created registration with ID: {registration.registration_id}")
 
-                context = {
+            # Send email notification
+            send_email(
+                subject="Event Registration Successful",
+                to_email=user.email,
+                template_name="event-registration.html",
+                context={
                     "user_name": user.email,
                     "event_title": event.title,
                     "event_start_date": event.start_date,
@@ -52,9 +65,13 @@ class EventRegistrationCreateSerializer(serializers.ModelSerializer):
                     "registration_status": registration.registration_status,
                     "event_link": event.session_link,
                 }
-                send_email(subject="Event Registration Successful", to_email=user.email, template_name="event-registration.html", context=context)
+            )
+            registrations.append(registration)
 
-        return registrations
+        # Serialize and return the registrations
+        serialized_data = EventRegistrationSerializer(registrations, many=True).data
+        print(f"Serialized Data: {serialized_data}")  # Debugging: Check the serialized output
+        return serialized_data
     
 class EventRegistrationPatchSerializer(serializers.ModelSerializer):
     class Meta:

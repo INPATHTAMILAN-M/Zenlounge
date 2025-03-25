@@ -34,23 +34,36 @@ class Event(models.Model):
     def __str__(self):
         return self.title
 
-# Event Registration
+from django.utils.crypto import get_random_string
+
 class EventRegistration(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='event_registrations')
-    registration_id = models.CharField(max_length=100, default='REGIS' + str(uuid.uuid4().int)[:6],null=True,blank=True)    
-    registration_status = models.CharField(max_length=20, choices=[('Pending', 'Pending'), ('Completed', 'Completed'), ('Failed', 'Failed')], default='Completed')
-    # amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    # payment_status = models.CharField(max_length=20, default='Pending', null=True, blank=True)
+    registration_id = models.CharField(max_length=100, unique=True, editable=False)  # Ensure uniqueness and prevent manual edits
+    registration_status = models.CharField(
+        max_length=20,
+        choices=[('Pending', 'Pending'), ('Completed', 'Completed'), ('Failed', 'Failed')],
+        default='Pending'
+    )
     registration_date = models.DateTimeField(auto_now_add=True)
 
-    # def save(self, *args, **kwargs):
-    #     if not self.amount:
-    #         self.amount = self.event.price
-    #     super().save(*args, **kwargs)
+    def save(self, *args, **kwargs):
+        # Generate a unique registration_id if it doesn't already exist
+        if not self.registration_id:
+            self.registration_id = self.generate_unique_registration_id()
+        super().save(*args, **kwargs)
+
+    @staticmethod
+    def generate_unique_registration_id():
+        while True:
+            # Generate a random string prefixed with "REGIS"
+            registration_id = f"REGIS{get_random_string(length=6).upper()}"
+            # Check if the generated ID is unique
+            if not EventRegistration.objects.filter(registration_id=registration_id).exists():
+                return registration_id
 
     def __str__(self):
-        return f"Registration for {self.event.title} by {self.user.email}"    
+        return f"Registration for {self.event.title} by {self.user.email}" 
 
 
 # Event Logs
