@@ -63,7 +63,7 @@ class EventRegistrationCreateSerializer(serializers.ModelSerializer):
                     "event_location": "Online",
                     "registration_id": registration.registration_id,
                     "registration_status": registration.registration_status,
-                    "event_link": event.session_link,
+                    "event_link": "https://filez.zenwellnesslounge.com/view-order?id={}".format(event.id),
                 }
             )
             registrations.append(registration)
