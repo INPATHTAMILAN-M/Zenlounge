@@ -76,3 +76,26 @@ class PasswordConfirmSerializer(serializers.Serializer):
 
 
 
+from rest_framework import serializers
+from django.contrib.auth import password_validation
+
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True, write_only=True)
+    new_password = serializers.CharField(required=True, write_only=True)
+    confirm_password = serializers.CharField(required=True, write_only=True)
+
+    def validate_old_password(self, value):
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError("Old password is incorrect.")
+        return value
+
+    def validate(self, data):
+        if data["new_password"] != data["confirm_password"]:
+            raise serializers.ValidationError({"confirm_password": "New password and confirm password do not match."})
+        
+        # Validate password complexity
+        password_validation.validate_password(data["new_password"], self.context['request'].user)
+        
+        return data
+

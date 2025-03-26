@@ -8,7 +8,9 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import PasswordResetSerializer, PasswordConfirmSerializer, UserSignupSerializer
+from .serializers import (
+    PasswordResetSerializer, PasswordConfirmSerializer, UserSignupSerializer,ChangePasswordSerializer
+)
 from .utils.email_sender import send_email
 
 User = get_user_model()
@@ -66,6 +68,23 @@ class ChangePasswordViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
 
     def create(self, request):
+        serializer = ChangePasswordSerializer(data=request.data, context={"request": request})
+        if serializer.is_valid():
+            user = request.user
+            user.set_password(serializer.validated_data["new_password"])
+            user.save()
+
+            # Keep the user logged in
+            update_session_auth_hash(request, user)
+
+            return Response({"detail": "Password updated successfully."}, status=status.HTTP_200_OK)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ChangePasswordViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request):
         user = request.user
         old_password = request.data.get("old_password")
         new_password = request.data.get("new_password")
@@ -101,7 +120,7 @@ class PasswordResetRequestView(APIView):
 
             # Generate password reset token
             token = default_token_generator.make_token(user)
-            reset_url = f"{settings.FRONTEND_URL}/change-password-confirm/?id={user.pk}&token={token}/"
+            reset_url = f"{settings.FRONTEND_URL}/forgot-new-password/?id={user.pk}&token={token}/"
 
             # Send email
             send_email(
