@@ -179,7 +179,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
-FRONTEND_URL = 'http://filez.zenwellnesslounge.com/'
+FRONTEND_URL = 'https://filez.zenwellnesslounge.com/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
