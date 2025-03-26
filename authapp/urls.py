@@ -27,7 +27,7 @@ router.register(r'users', CustomUserViewSet)
 router.register(r'payment-gateways', PaymentGatewayViewSet)
 router.register(r'groups', GroupViewSet)
 router.register(r'countries', CountryViewSet)
-router.register(r'change-password', ChangePasswordViewSet, basename='change-password')
+router.register(r'change-password', ChangePasswordViewSet,basename='change-password')
 
 
 
