@@ -1,21 +1,16 @@
 from django.contrib.auth.tokens import default_token_generator
-from django.contrib.auth import get_user_model
-# from django.core.mail import send_mail
+from django.contrib.auth import get_user_model, update_session_auth_hash
 from django.shortcuts import get_object_or_404
 from django.conf import settings
 from rest_framework.views import APIView
-from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
+from rest_framework import generics, viewsets, status
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.permissions import AllowAny
 from rest_framework.parsers import JSONParser
+from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import PasswordResetSerializer, PasswordConfirmSerializer, UserSignupSerializer
 from .utils.email_sender import send_email
-from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework.response import Response
-from rest_framework import status
+
 User = get_user_model()
 
 
@@ -39,6 +34,16 @@ class UserProfileAPIView(generics.RetrieveUpdateAPIView):
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
+        email = request.data.get("email")
+        password = request.data.get("password")
+
+        # Check if email exists in the database
+        user = User.objects.filter(email=email).first()
+        if user and not user.check_password(password):
+            return Response({"detail": "Incorrect password."}, status=status.HTTP_401_UNAUTHORIZED)
+        elif not user:
+            return Response({"detail": "User with this email does not exist."}, status=status.HTTP_400_BAD_REQUEST)
+
         serializer = self.get_serializer(data=request.data)
         try:
             serializer.is_valid(raise_exception=True)
@@ -55,6 +60,33 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         token_response.data['username'] = user.username
         token_response.data['group'] = user.groups.values_list('name', flat=True)
         return token_response
+    
+
+class ChangePasswordViewSet(viewsets.ViewSet):
+    permission_classes = [IsAuthenticated]
+
+    def create(self, request):
+        user = request.user
+        old_password = request.data.get("old_password")
+        new_password = request.data.get("new_password")
+        confirm_password = request.data.get("confirm_password")
+
+        # Check if old password is correct
+        if not user.check_password(old_password):
+            return Response({"detail": "Old password is incorrect."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Check if new password and confirm password match
+        if new_password != confirm_password:
+            return Response({"detail": "New password and confirm password do not match."}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Set the new password
+        user.set_password(new_password)
+        user.save()
+
+        # Keep user logged in after password change
+        update_session_auth_hash(request, user)
+
+        return Response({"detail": "Password updated successfully."}, status=status.HTTP_200_OK)
     
 class PasswordResetRequestView(APIView):
     permission_classes = [AllowAny]

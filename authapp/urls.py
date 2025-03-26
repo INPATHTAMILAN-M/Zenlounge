@@ -11,6 +11,7 @@ from .views import (
     UserProfileAPIView,
     PasswordResetRequestView,
     PasswordResetConfirmView,
+    ChangePasswordViewSet
     
 )
 from .viewset import (
@@ -26,6 +27,7 @@ router.register(r'users', CustomUserViewSet)
 router.register(r'payment-gateways', PaymentGatewayViewSet)
 router.register(r'groups', GroupViewSet)
 router.register(r'countries', CountryViewSet)
+router.register(r'change-password', ChangePasswordViewSet)
 
 
 
