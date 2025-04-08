@@ -66,6 +66,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 
 class ChangePasswordViewSet(viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
+    serializer_class = ChangePasswordSerializer
 
     def create(self, request):
         serializer = ChangePasswordSerializer(data=request.data, context={"request": request})
@@ -80,33 +81,7 @@ class ChangePasswordViewSet(viewsets.ViewSet):
             return Response({"detail": "Password updated successfully."}, status=status.HTTP_200_OK)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-class ChangePasswordViewSet(viewsets.ViewSet):
-    permission_classes = [IsAuthenticated]
-
-    def create(self, request):
-        user = request.user
-        old_password = request.data.get("old_password")
-        new_password = request.data.get("new_password")
-        confirm_password = request.data.get("confirm_password")
-
-        # Check if old password is correct
-        if not user.check_password(old_password):
-            return Response({"detail": "Old password is incorrect."}, status=status.HTTP_400_BAD_REQUEST)
-
-        # Check if new password and confirm password match
-        if new_password != confirm_password:
-            return Response({"detail": "New password and confirm password do not match."}, status=status.HTTP_400_BAD_REQUEST)
-
-        # Set the new password
-        user.set_password(new_password)
-        user.save()
-
-        # Keep user logged in after password change
-        update_session_auth_hash(request, user)
-
-        return Response({"detail": "Password updated successfully."}, status=status.HTTP_200_OK)
-    
+  
 class PasswordResetRequestView(APIView):
     permission_classes = [AllowAny]
     parser_classes = [JSONParser]
