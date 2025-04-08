@@ -13,3 +13,4 @@ __init__.py
 /staticfiles/
 media/
 /static_files/
+*.sqlite3
