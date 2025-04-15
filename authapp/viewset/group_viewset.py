@@ -4,7 +4,7 @@ from django.contrib.auth.models import Group
 
 
 class GroupViewSet(viewsets.ModelViewSet):
-    queryset = Group.objects.all()
+    queryset = Group.objects.all().exclude(id=2)
     serializer_class = GroupSerializer
 
     def get_serializer_class(self):
