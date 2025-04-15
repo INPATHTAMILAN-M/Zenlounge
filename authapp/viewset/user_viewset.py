@@ -8,7 +8,7 @@ from ..filters import CustomUserFilter
 from django_filters import rest_framework as filters
 
 class CustomUserViewSet(viewsets.ModelViewSet):
-    queryset = CustomUser.objects.all().order_by('-id')
+    queryset = CustomUser.objects.all().exclude(id=2).order_by('-id')
     serializer_class = CustomUserListSerializer
     permission_classes = [permissions.IsAuthenticated]
     http_method_names = ['get', 'post', 'patch','delete']
