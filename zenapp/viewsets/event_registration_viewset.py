@@ -6,7 +6,7 @@ from ..serializers.event_registration_serializer import EventRegistrationGetSeri
 from ..filters import EventRegistrationFilter
 
 class EventRegistrationViewSet(viewsets.ModelViewSet):
-    queryset = EventRegistration.objects.all()
+    queryset = EventRegistration.objects.order_by('-registration_date')
     # serializer_class = EventRegistrationListSerializer
     permission_classes = [permissions.IsAuthenticated]
     http_method_names = ['get', 'post','patch', 'delete']

@@ -13,7 +13,7 @@ from ..serializers.event_serializer import (
 )
 
 class EventViewSet(viewsets.ModelViewSet):
-    queryset = Event.objects.all().order_by('-id')
+    queryset = Event.objects.all().order_by('-created_on')
     serializer_class = EventListSerializer
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [DjangoFilterBackend]
