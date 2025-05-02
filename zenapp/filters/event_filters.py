@@ -7,6 +7,7 @@ from datetime import timedelta
 class EventFilter(filters.FilterSet):
     is_future = django_filters.BooleanFilter(method='filter_is_future')
     title = django_filters.CharFilter(lookup_expr='icontains')
+    end_date = django_filters.DateFilter(lookup_expr='lte')
 
     class Meta:
         model = Event
