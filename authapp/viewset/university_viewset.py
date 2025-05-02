@@ -8,4 +8,8 @@ class UniversityViewSet(viewsets.ModelViewSet):
     # permission_classes = [permissions.IsAuthenticated]
     http_method_names = ['get', 'post', 'patch', 'delete']
 
+    def list(self, request, *args, **kwargs):
+        self.pagination_class = None  # Disable pagination
+        return super().list(request, *args, **kwargs)
+
 
