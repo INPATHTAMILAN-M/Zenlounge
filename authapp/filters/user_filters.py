@@ -14,7 +14,6 @@ class CustomUserFilter(filters.FilterSet):
             'address': ['exact', 'icontains'],
             'date_of_birth': ['exact', 'year__gt', 'year__lt'],
             'university': ['exact'],
-            'intrested_topics': ['exact'],
             'year_of_entry': ['exact', 'gte', 'lte'],
             'email': ['exact', 'icontains'],
         }
