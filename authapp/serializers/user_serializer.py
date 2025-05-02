@@ -8,6 +8,8 @@ from django.contrib.auth.tokens import default_token_generator
 from django.conf import settings
 import random
 import string
+import json
+
 
 class CountrySerializer(serializers.ModelSerializer):
     class Meta:
@@ -38,14 +40,20 @@ class CustomUserCreateSerializer(serializers.ModelSerializer):
         queryset=Group.objects.all(), many=True, required=False
     )
 
-
     class Meta:
         model = CustomUser
         fields = [
             'email', 'username', 'phone_number', 'address', 'date_of_birth',
-            'university', 'intrested_topics', 'year_of_entry', 'profile_picture','country',
-            'groups','department','work','year_of_graduation','is_open_to_be_mentor'
+            'university', 'interested_topics', 'year_of_entry', 'profile_picture', 'country',
+            'groups', 'department', 'work', 'year_of_graduation', 'is_open_to_be_mentor'
         ]
+
+    def validate_interested_topics(self, value):
+        if isinstance(value, list):
+            return json.dumps(value)
+        elif isinstance(value, str):
+            return json.dumps([value])
+        return json.dumps([])
 
     def create(self, validated_data):
         groups = validated_data.pop('groups', None) or []
@@ -54,7 +62,7 @@ class CustomUserCreateSerializer(serializers.ModelSerializer):
         validated_data['password'] = password
 
         user = CustomUser.objects.create(**validated_data)
-        user.set_password(password)  # Set the generated password
+        user.set_password(password)
         user.save()
 
         if groups:
@@ -64,7 +72,6 @@ class CustomUserCreateSerializer(serializers.ModelSerializer):
 
         if not is_alumni:
             reset_url = f"{settings.FRONTEND_URL}/login/"
-
             send_email(
                 subject="Your Account Created",
                 to_email=user.email,
@@ -76,6 +83,7 @@ class CustomUserCreateSerializer(serializers.ModelSerializer):
                     "url": reset_url
                 },
             )
+
         return user
 
 
@@ -108,30 +116,52 @@ class CustomUserListSerializer(serializers.ModelSerializer):
     event_registrations_count = serializers.SerializerMethodField()
     university = UniversitySerializer()
     country = CountrySerializer()
+
     class Meta:
         model = CustomUser
-        fields = ['id', 'email', 'username', 'phone_number', 'address', 'date_of_birth', 
-                  'university', 'intrested_topics', 'year_of_entry', 'profile_picture', 'department',
-                  'groups', 'event_registrations_count','date_joined', 'country','work','year_of_graduation','is_open_to_be_mentor']
+        fields = [
+            'id', 'email', 'username', 'phone_number', 'address', 'date_of_birth',
+            'university', 'intrested_topics', 'year_of_entry', 'profile_picture',
+            'department', 'groups', 'event_registrations_count', 'date_joined',
+            'country', 'work', 'year_of_graduation', 'is_open_to_be_mentor'
+        ]
 
     def get_event_registrations_count(self, obj):
-        return obj.event_registrations.count()  # Assuming event_registrations is a related name or field on CustomUser
+        return obj.event_registrations.count()
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        try:
+            data['intrested_topics'] = json.loads(data['intrested_topics']) if data['intrested_topics'] else []
+        except (TypeError, json.JSONDecodeError):
+            data['intrested_topics'] = []
+        return data
 
 class CustomUserDetailSerializer(serializers.ModelSerializer):
-
     event_registrations = EveventRegistrationSerializer(many=True, read_only=True)
     university = UniversitySerializer()
     country = CountrySerializer()
     group = serializers.SerializerMethodField() 
-    
+
     class Meta:
         model = CustomUser
-        fields = ['id', 'email', 'username', 'phone_number', 'address', 'date_of_birth','department',
-                  'university', 'intrested_topics', 'year_of_entry', 'profile_picture',
-                  'groups', 'event_registrations', 'date_joined', 'country', 'group','work','year_of_graduation','is_open_to_be_mentor']
+        fields = [
+            'id', 'email', 'username', 'phone_number', 'address', 'date_of_birth', 'department',
+            'university', 'intrested_topics', 'year_of_entry', 'profile_picture',
+            'groups', 'event_registrations', 'date_joined', 'country', 'group',
+            'work', 'year_of_graduation', 'is_open_to_be_mentor'
+        ]
 
     def get_group(self, obj):
-        group = obj.groups.first() 
+        group = obj.groups.first()
         if group:
             return {'id': group.id, 'name': group.name}
-        return None 
+        return None
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        try:
+            data['intrested_topics'] = json.loads(data['intrested_topics']) if data['intrested_topics'] else []
+        except (TypeError, json.JSONDecodeError):
+            data['intrested_topics'] = []
+        return data
