@@ -39,21 +39,29 @@ class CustomUserCreateSerializer(serializers.ModelSerializer):
     groups = serializers.PrimaryKeyRelatedField(
         queryset=Group.objects.all(), many=True, required=False
     )
+    intrested_topics = serializers.JSONField(required=False)
 
     class Meta:
         model = CustomUser
         fields = [
             'email', 'username', 'phone_number', 'address', 'date_of_birth',
-            'university', 'interested_topics', 'year_of_entry', 'profile_picture', 'country',
+            'university', 'intrested_topics', 'year_of_entry', 'profile_picture', 'country',
             'groups', 'department', 'work', 'year_of_graduation', 'is_open_to_be_mentor'
         ]
 
-    def validate_interested_topics(self, value):
-        if isinstance(value, list or str):
+    def validate_intrested_topics(self, value):
+        """
+        Accept list or comma-separated string, return as JSON string.
+        """
+        print (f"Validating interested topics: {value}")
+        if isinstance(value, list):
             return json.dumps(value)
+        elif isinstance(value, str):
+            return json.dumps([t.strip() for t in value.split(",") if t.strip()])
         return json.dumps([])
 
     def create(self, validated_data):
+        print(validated_data)
         groups = validated_data.pop('groups', None) or []
 
         password = ''.join(random.choices(string.ascii_letters + string.digits, k=6))
