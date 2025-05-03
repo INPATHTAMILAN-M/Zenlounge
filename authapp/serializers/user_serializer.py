@@ -49,10 +49,8 @@ class CustomUserCreateSerializer(serializers.ModelSerializer):
         ]
 
     def validate_interested_topics(self, value):
-        if isinstance(value, list):
+        if isinstance(value, list or str):
             return json.dumps(value)
-        elif isinstance(value, str):
-            return json.dumps([value])
         return json.dumps([])
 
     def create(self, validated_data):
