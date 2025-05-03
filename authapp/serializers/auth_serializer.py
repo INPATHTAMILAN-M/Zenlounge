@@ -10,7 +10,7 @@ from authapp.models import CustomUser
 from authapp.utils.email_sender import send_email
 
 class UserSignupSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, required=True, min_length=6, 
+    password = serializers.CharField(write_only=True, required=False, min_length=6, 
                                      validators=[validate_password])
     is_alumni = serializers.BooleanField(default=False)
     intrested_topics = serializers.JSONField(required=False)
