@@ -45,6 +45,8 @@ class UserSignupSerializer(serializers.ModelSerializer):
             "emailaddress": user.email,
             "department": profile.department or None,
             "yearofentry": profile.year_of_entry or None,
+            "interestedtopics": json.loads(profile.intrested_topics) if profile.intrested_topics else None,
+            "university": profile.university.name if profile.university else None,
         }
         template = "student-registration.html" if user.groups.filter(name__iexact="Student").exists() else "alumni-registration.html"
         send_email(subject="Registration Successful", to_email=user.email, template_name=template, context=context)
