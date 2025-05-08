@@ -48,12 +48,11 @@ class UserSignupSerializer(serializers.ModelSerializer):
             "country": profile.country or ' ',
             "address": profile.address or ' ',
             "yearofentry": profile.year_of_entry or ' ',
-
             "emailaddress": user.email,
             "phonenumber": profile.phone_number or ' ',
             "mentor": "Yes" if profile.is_open_to_be_mentor else "No",
-            "interestedtopics": json.loads(profile.intrested_topics) if profile.intrested_topics else None,
-            "university": profile.university.name if profile.university else None,
+            "interestedtopics": ', '.join(json.loads(profile.intrested_topics)) if profile.intrested_topics else ' ',
+            "university": profile.university.name if profile.university else ' ',
         }
         template = "student-registration.html" if user.groups.filter(name__iexact="Student").exists() else "alumni-registration.html"
         send_email(subject="Registration Successful", to_email=user.email, template_name=template, context=context)
