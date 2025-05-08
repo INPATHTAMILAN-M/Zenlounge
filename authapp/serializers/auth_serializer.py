@@ -3,6 +3,8 @@ import string
 
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import Group
+from django.utils.crypto import get_random_string
+
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 
@@ -38,6 +40,7 @@ class UserSignupSerializer(serializers.ModelSerializer):
     def send_registration_email(self, user):
         profile = CustomUser.objects.get(id=user.id)
         context = {
+            "role": "Alumni" if user.groups.filter(name__iexact="Alumni").exists() else "Student",
             "name": user.username,
             "emailaddress": user.email,
             "department": profile.department or None,
@@ -59,6 +62,9 @@ class UserSignupSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         alumni = validated_data.pop("is_alumni", None)
+
+        # if not validated_data.get('password'):
+        #     validated_data['password'] = get_random_string()
         user = CustomUser.objects.create(**validated_data)
 
         group_name = "Alumni" if alumni else "Student"
@@ -85,6 +91,7 @@ class PasswordConfirmSerializer(serializers.Serializer):
 
 from rest_framework import serializers
 from django.contrib.auth import password_validation
+
 
 class ChangePasswordSerializer(serializers.Serializer):
     old_password = serializers.CharField(required=True, write_only=True)
