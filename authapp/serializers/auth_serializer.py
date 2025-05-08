@@ -42,9 +42,16 @@ class UserSignupSerializer(serializers.ModelSerializer):
         context = {
             "role": "Alumni" if user.groups.filter(name__iexact="Alumni").exists() else "Student",
             "name": user.username,
+            "yeargraduated": profile.year_of_graduation or ' ',
+            "department": profile.department or ' ',
+            "work": profile.work or ' ',
+            "country": profile.country or ' ',
+            "address": profile.address or ' ',
+            "yearofentry": profile.year_of_entry or ' ',
+
             "emailaddress": user.email,
-            "department": profile.department or None,
-            "yearofentry": profile.year_of_entry or None,
+            "phonenumber": profile.phone_number or ' ',
+            "mentor": "Yes" if profile.is_open_to_be_mentor else "No",
             "interestedtopics": json.loads(profile.intrested_topics) if profile.intrested_topics else None,
             "university": profile.university.name if profile.university else None,
         }
