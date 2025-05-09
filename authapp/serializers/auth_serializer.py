@@ -55,7 +55,8 @@ class UserSignupSerializer(serializers.ModelSerializer):
             "university": profile.university.name if profile.university else ' ',
         }
         template = "student-registration.html" if user.groups.filter(name__iexact="Student").exists() else "alumni-registration.html"
-        send_email(subject="Registration Successful", to_email=user.email, template_name=template, context=context)
+        subject = "Welcome! Your Student Registration is Confirmed – Next Steps Inside" if user.groups.filter(name__iexact="Student").exists() else "Welcome to the Alumni Community"
+        send_email(subject=subject, to_email=user.email, template_name=template, context=context)
 
     def validate_intrested_topics(self, value):
         """
