@@ -2,20 +2,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="{% static 'Images/favicon.png' %}" type="image/x-icon">
     <title>Alumni Registration</title>
     <style>
-        body{
+        body {
             background-color: #f6f8fb;
         }
         .container {
-            margin: 0;
+            font-family: 'DM sans', sans-serif;
             font-size: 15px;
             padding: 0;
-            font-family: 'DM sans', sans-serif;
+            margin: 0;
         }
         .email-container {
             max-width: 700px;
@@ -31,24 +30,6 @@
         }
         .logo img {
             height: 150px;
-            margin-top: 30px;
-        }
-        .header {
-            text-align: center;
-            font-size: 28px;
-            color: #5a5858;
-            font-family: Georgia, Arial, Helvetica, sans-serif;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
-        }
-        .dates {
-            text-align: center;
-            font-size: 9px;
-            color: #999893;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            margin-bottom: 20px;
         }
         .details-table {
             width: 100%;
@@ -71,23 +52,43 @@
 </head>
 <body>
     <div class="container">
+        <!-- Logo -->
         <div class="logo">
             <a href="https://zenbkad.zenwellnesslounge.com" target="_blank">
-                <img src="https://zenbkad.zenwellnesslounge.com/static/Images/zenwellneslounge.png" alt="logo" class="CToWUd" data-bit="iit">
+                <img src="https://zenbkad.zenwellnesslounge.com/static/Images/zenwellneslounge.png" alt="logo">
             </a>
         </div>
+
+        <!-- Email Content -->
         <div class="email-container">
-            <br>
-            <div style="text-align: center;color: #777777;">
-                <td colspan="2">
-                    <h1 style="color:#7A3596;">Thank You for Registering!</h1>
-                    <p style="font-size:20px; margin-top:30px; color:#7A3596; text-align: center; line-height:1.5;">
-                        <span style="font-weight: bold;">{{ name }}</span>, your registration has been successfully received for  
-                        <span style="font-weight: bold;">{{ interestedtopics }}</span> in the <span style="font-weight: bold;">{{ university }}</span> Alumni Network.
-                    </p>
-                </td>
-            </div>
-            <br><br>
+            <p style="font-size: 18px; color: #5a5858;">Dear {{ name }},</p>
+            <p style="line-height: 1.6; color: #5a5858;">
+                Thank you for registering as an alumnus of <strong>Zen Wellness Lounge</strong>. We are delighted to welcome you to our vibrant alumni community and appreciate your continued association with us.
+            </p>
+            <p style="line-height: 1.6; color: #5a5858;">
+                As we strive to foster a strong network of professionals who can inspire and support current students, we invite you to take the next step:
+            </p>
+            <ul style="line-height: 1.6; color: #5a5858;">
+                <li>Visit our <a href="https://zenwellnesslounge.com/the-program/" target="_blank" style="color: #7A3596;">https://zenwellnesslounge.com/the-program/</a> to explore ongoing initiatives and engagement opportunities.</li>
+                <li>Email us your areas of expertise, orientation, and your interest in conducting sessions or mentoring activities.</li>
+            </ul>
+            <p style="line-height: 1.6; color: #5a5858;">
+                Your insights and experience are invaluable, and we would be honored to have your involvement in shaping future programs and knowledge-sharing sessions.
+            </p>
+            <p style="line-height: 1.6; color: #5a5858;">
+                Should you have any questions or need assistance, please feel free to reach out.
+            </p>
+            <p style="line-height: 1.6; color: #5a5858;">
+                Warm regards,<br>
+                <strong>Viji Narayanan</strong><br>
+                Founder and CEO<br>
+                Zen Wellness Lounge<br>
+                <a href="mailto:viji.zenwellnesslounge@gmail.com" style="color: #7A3596;">viji.zenwellnesslounge@gmail.com</a><br>
+                <a href="https://zenwellnesslounge.com" style="color: #7A3596;">https://zenwellnesslounge.com</a>
+            </p>
+
+            <!-- User Details Table -->
+            <h3 style="color: #7A3596; margin-top: 40px;">Your Submitted Details</h3>
             <table class="details-table">
                 <tr style="background: #f5f5f5;"><td>Role</td><td>{{ role }} (only for registration)</td></tr>
                 <tr style="background: #f5f5f5;"><td>Name</td><td>{{ name }}</td></tr>
@@ -105,14 +106,15 @@
                 <tr style="background: #f5f5f5;"><td>University</td><td>{{ university }}</td></tr>
             </table>
         </div>
-        <div style="text-align: center;padding: 50px 0 0 0;">
-            Explore our latest insights {{ interestedtopics }} at <a href="https://zenwellnesslounge.com/" style="color: #7A3596;">zenwellnesslounge.com</a>.
+
+        <!-- Footer -->
+        <div style="text-align: center; padding: 40px 20px 20px 20px; color: #5a5858;">
+            Explore more at <a href="https://zenwellnesslounge.com/" style="color: #7A3596;">zenwellnesslounge.com</a>.
         </div>
-        <div style="text-align: center;padding: 10px 0 50px 0;">
-            If you have any questions, feel free to contact us at <br> 
-            <a href="mailto:viji.zenwellnesslounge@gmail.com" target="_blank" style="color: #7A3596;">viji.zenwellnesslounge@gmail.com</a>  
-            or 
-            <a href="mailto:swapna.zenwellnesslounge.com@gmail.com" target="_blank" style="color: #7A3596;">swapna.zenwellnesslounge@gmail.com</a>
+        <div style="text-align: center; padding-bottom: 40px; font-size: 14px; color: #777777;">
+            Questions? Contact us at:<br>
+            <a href="mailto:viji.zenwellnesslounge@gmail.com" style="color: #7A3596;">viji.zenwellnesslounge@gmail.com</a> or 
+            <a href="mailto:swapna.zenwellnesslounge@gmail.com" style="color: #7A3596;">swapna.zenwellnesslounge@gmail.com</a>
         </div>
     </div>
 </body>

@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
 
+<head>
     {% load static %}
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" href="{% static 'Images/favicon.png' %}" type="image/x-icon">
     <title>Student Registration</title>
     <style>
-        body{
+        body {
             background-color: #f6f8fb;
         }
+
         .container {
             margin: 0;
             font-size: 15px;
             padding: 0;
-            font-family: 'DM sans' sans-serif ;
+            font-family: 'DM sans', sans-serif;
         }
+
         .email-container {
             max-width: 700px;
             margin: 0 auto;
@@ -24,15 +26,18 @@
             padding: 70px;
             border: 1px solid #7A3596;
         }
+
         .logo {
             text-align: center;
-            margin-top: 50px ;
+            margin-top: 50px;
             margin-bottom: 20px;
         }
+
         .logo img {
             height: 150px;
             margin-top: 30px;
         }
+
         .header {
             text-align: center;
             font-size: 28px;
@@ -42,67 +47,112 @@
             letter-spacing: 2px;
             margin-bottom: 20px;
         }
-        .dates {
-            text-align: center;
-            font-size: 9px;
-            color: #999893;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            margin-bottom: 20px;
+
+        .content {
+            font-size: 16px;
+            color: #5a5858;
+            line-height: 1.6;
+            margin-top: 30px;
         }
+
         .details-table {
             width: 100%;
             max-width: 620px;
-            margin: 0 auto;
+            margin: 20px auto;
             border-collapse: collapse;
         }
+
         .details-table td {
             padding: 10px;
             border: 3px solid white;
             color: #5a5858;
         }
+
         .footer {
             font-size: 13px;
             font-style: italic;
             color: #777777;
-            margin-top: 20px;
+            margin-top: 40px;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="logo">
             <a href="https://zenwellnesslounge.com" target="_blank">
-                <img src="https://zenbkad.zenwellnesslounge.com/static/Images/zenwellneslounge.png" alt="logo" class="CToWUd" data-bit="iit">
+                <img src="https://zenbkad.zenwellnesslounge.com/static/Images/zenwellneslounge.png" alt="logo"
+                    class="CToWUd" data-bit="iit">
             </a>
         </div>
-        <div class="email-container" >
-            
-            <br>
-            <div style="text-align: center;color: #777777;">
-                <td colspan="2">
-                    <h1 style="color:#7A3596;">Thank You !</h1>
-                    <p style="font-size:20px; margin-top:30px; color:#7A3596; text-align: center; line-height:1.5;" ><span style="font-weight: bold;">{{ name }}</span> is registered for the <span style="font-weight: bold;">{{ interestedtopics }}</span> in ZenWellnessLounge.</p>
-                </td>
-            </div><br><br>
+        <div class="email-container">
+            <div class="content">
+                <p>Dear {{ name }},</p>
+
+                <p>Thank you for registering with <strong>Zen Wellness Lounge</strong>. We’re excited to welcome you as
+                    a student and look forward to supporting you on your learning journey.</p>
+
+                <p>Your registration is currently being processed. In the meantime, we encourage you to make the most of
+                    what our platform has to offer:</p>
+
+                <ul>
+                    <li>Browse our <a href="https://zenwellnesslounge.com/the-program/"
+                            style="color: #7A3596;">https://zenwellnesslounge.com/programs</a> to discover a wide range
+                        of learning opportunities and upcoming events.</li>
+                    <li>Visit the <strong>Lounges</strong> to network, collaborate, and engage with fellow students and
+                        mentors.</li>
+                    <li>Register for sessions that align with your personal and professional interests to start building
+                        meaningful experiences.</li>
+                </ul>
+
+                <p>We’re committed to providing a rich and dynamic environment that fosters growth, learning, and
+                    connection.</p>
+
+                <p>Should you have any questions or need assistance, feel free to contact us at any time.</p>
+
+                <p>Warm regards,<br>
+                    Viji<br>
+                    Student Coordinator<br>
+                    Zen Wellness Lounge<br>
+                    <a href="mailto:viji.zenwellnesslounge@gmail.com"
+                        style="color: #7A3596;">viji.zenwellnesslounge@gmail.com</a> <br>
+                    <a href="https://zenwellnesslounge.com" style="color: #7A3596;">zenwellnesslounge.com</a>
+                </p>
+            </div>
+            <h3 style="color: #7A3596; margin-top: 40px;">Your Submitted Details</h3>
+
             <table class="details-table">
-                <tr style="background: #f5f5f5;"><td>Role</td><td>{{ role }}</td></tr>
-                <tr style="background: #f5f5f5;"><td>Name</td><td>{{ name }}</td></tr>
-                <tr style="background: #f5f5f5;"><td>Email Address</td><td>{{ emailaddress }}</td></tr>
-                <tr style="background: #f5f5f5;"><td>Department</td><td>{{ department }}</td></tr>
-                <tr style="background: #f5f5f5;"><td>Year of Entry</td><td>{{ yearofentry }}</td></tr>
-                <tr style="background: #f5f5f5;"><td>Interested Topics</td><td>{{ interestedtopics }}</td></tr>
-                <tr style="background: #f5f5f5;"><td>University</td><td>{{ university }}</td></tr>
+                <tr style="background: #f5f5f5;">
+                    <td>Role</td>
+                    <td>{{ role }}</td>
+                </tr>
+                <tr style="background: #f5f5f5;">
+                    <td>Name</td>
+                    <td>{{ name }}</td>
+                </tr>
+                <tr style="background: #f5f5f5;">
+                    <td>Email Address</td>
+                    <td>{{ emailaddress }}</td>
+                </tr>
+                <tr style="background: #f5f5f5;">
+                    <td>Department</td>
+                    <td>{{ department }}</td>
+                </tr>
+                <tr style="background: #f5f5f5;">
+                    <td>Year of Entry</td>
+                    <td>{{ yearofentry }}</td>
+                </tr>
+                <tr style="background: #f5f5f5;">
+                    <td>Interested Topics</td>
+                    <td>{{ interestedtopics }}</td>
+                </tr>
+                <tr style="background: #f5f5f5;">
+                    <td>University</td>
+                    <td>{{ university }}</td>
+                </tr>
             </table>
-        </div>
-        <div style="text-align: center;padding: 50px 0 0 0;">
-            Explore our latest insights {{ interestedtopics }} at <a href="https://zenwellnesslounge.com/" style="color: #7A3596;">zenwellnesslounge.com</a>.
-            
-        </div>
-        <div style="text-align: center;padding: 10px 0 50px 0;">
-            If you have any questions, feel free to contact us at <br> <a href="mailto:viji.zenwellnesslounge@gmail.com" target="_blank" style="color: #7A3596;">viji.zenwellnesslounge@gmail.com</a>  or <a href="mailto:swapna.zenwellnesslounge.com@gmail.com" target="_blank" style="color: #7A3596;"> swapma.zenwellnesslounge@gmail.com</a>
-            
         </div>
     </div>
 </body>
+
 </html>
