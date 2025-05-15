@@ -3,7 +3,7 @@ from ..models import University, IntrestedTopic
 from ..serializers import UniversitySerializer, IntrestedTopicSerializer
 
 class UniversityViewSet(viewsets.ModelViewSet):
-    queryset = University.objects.all()
+    queryset = University.objects.all().order_by('name')
     serializer_class = UniversitySerializer
     # permission_classes = [permissions.IsAuthenticated]
     http_method_names = ['get', 'post', 'patch', 'delete']
