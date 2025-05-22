@@ -46,7 +46,8 @@ class CustomUserCreateSerializer(serializers.ModelSerializer):
         fields = [
             'email', 'username', 'phone_number', 'address', 'date_of_birth',
             'university', 'intrested_topics', 'year_of_entry', 'profile_picture', 'country',
-            'groups', 'department', 'work', 'year_of_graduation', 'is_open_to_be_mentor'
+            'first_name', 'last_name','groups', 'department', 'work', 'year_of_graduation', 
+            'is_open_to_be_mentor'
         ]
 
     def validate_intrested_topics(self, value):

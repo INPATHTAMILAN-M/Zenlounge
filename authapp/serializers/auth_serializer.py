@@ -12,8 +12,12 @@ from authapp.models import CustomUser
 from authapp.utils.email_sender import send_email
 
 class UserSignupSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, required=False, min_length=6, 
-                                     validators=[validate_password])
+    password = serializers.CharField(
+        write_only=True,
+        required=False,
+        min_length=8,
+        validators=[validate_password]
+    )
     is_alumni = serializers.BooleanField(default=False)
     intrested_topics = serializers.JSONField(required=False)
     class Meta:
@@ -29,6 +33,8 @@ class UserSignupSerializer(serializers.ModelSerializer):
             "department",
             "intrested_topics",  # keep typo to match model
             "year_of_entry",
+            "first_name",
+            "last_name",
             "work",
             "profile_picture",
             "year_of_graduation",
