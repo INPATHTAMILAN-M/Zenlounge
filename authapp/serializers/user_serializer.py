@@ -84,7 +84,7 @@ class CustomUserCreateSerializer(serializers.ModelSerializer):
                 to_email=user.email,
                 template_name='welcome_email.html',
                 context={
-                    "username": user.username,
+                    "username": user.first_name + " " + user.last_name,
                     "email": user.email,
                     "password": password,
                     "url": reset_url
@@ -102,7 +102,7 @@ class CustomUserUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['id', 'email', 'username', 'phone_number', 'address', 'date_of_birth', 
+        fields = ['id', 'email', 'username', 'phone_number', 'address', 'date_of_birth', 'first_name', 'last_name',
                   'university', 'intrested_topics', 'year_of_entry', 'profile_picture','country',
                   'groups','department','work','year_of_graduation','is_open_to_be_mentor']
 
@@ -128,8 +128,8 @@ class CustomUserListSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = [
             'id', 'email', 'username', 'phone_number', 'address', 'date_of_birth',
-            'university', 'intrested_topics', 'year_of_entry', 'profile_picture',
-            'department', 'groups', 'event_registrations_count', 'date_joined',
+            'first_name','last_name','university', 'intrested_topics', 'year_of_entry', 
+            'profile_picture','department', 'groups', 'event_registrations_count', 'date_joined',
             'country', 'work', 'year_of_graduation', 'is_open_to_be_mentor'
         ]
 
@@ -154,7 +154,7 @@ class CustomUserDetailSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = [
             'id', 'email', 'username', 'phone_number', 'address', 'date_of_birth', 'department',
-            'university', 'intrested_topics', 'year_of_entry', 'profile_picture',
+            'university', 'intrested_topics', 'year_of_entry', 'profile_picture','first_name','last_name',
             'groups', 'event_registrations', 'date_joined', 'country', 'group',
             'work', 'year_of_graduation', 'is_open_to_be_mentor'
         ]

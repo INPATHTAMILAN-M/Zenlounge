@@ -5,7 +5,7 @@ from ..models import CustomUser
 class CustomUserFilter(filters.FilterSet):
     group_name = filters.CharFilter(field_name="groups__name", lookup_expr="icontains")  # Filter by group name
     is_active = filters.BooleanFilter(field_name="is_active")  # Filter by active status
-    search = filters.CharFilter(field_name="username", lookup_expr="icontains")  # Search filter
+    search = filters.CharFilter(field_name="first_name", lookup_expr="icontains")  # Search filter
 
     class Meta:
         model = CustomUser

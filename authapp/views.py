@@ -59,7 +59,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         token_response = super().post(request, *args, **kwargs)
         token_response.data['user_id'] = user.id
         token_response.data['email'] = user.email
-        token_response.data['username'] = user.username
+        token_response.data['username'] = user.first_name + " " + user.last_name
         token_response.data['group'] = user.groups.values_list('name', flat=True)
         return token_response
     

@@ -61,8 +61,8 @@ class Country(models.Model):
 class CustomUser(AbstractUser):
     phone_number = models.CharField(max_length=15, blank=True, null=True)
     username = models.CharField(max_length=30, blank=True, null=True)
-    first_name = models.CharField(max_length=30, blank=True, null=True)
-    last_name = models.CharField(max_length=30, blank=True, null=True)
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
     address = models.TextField(blank=True, null=True)
     date_of_birth = models.DateField(blank=True, null=True)
     university = models.ForeignKey(University, on_delete=models.CASCADE, blank=True, null=True)

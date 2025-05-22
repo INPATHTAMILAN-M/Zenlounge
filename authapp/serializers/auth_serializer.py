@@ -47,7 +47,7 @@ class UserSignupSerializer(serializers.ModelSerializer):
         profile = CustomUser.objects.get(id=user.id)
         context = {
             "role": "Alumni" if user.groups.filter(name__iexact="Alumni").exists() else "Student",
-            "name": user.username,
+            "name": user.first_name + " " + user.last_name,
             "yeargraduated": profile.year_of_graduation or ' ',
             "department": profile.department or ' ',
             "work": profile.work or ' ',
@@ -134,4 +134,9 @@ class ChangePasswordSerializer(serializers.Serializer):
         password_validation.validate_password(data["new_password"], self.context['request'].user)
         
         return data
+
+    def validate_new_password(self, value):
+        # Additional password validation
+        password_validation.validate_password(value, self.context['request'].user)
+        return value
 

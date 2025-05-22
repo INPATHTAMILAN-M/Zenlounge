@@ -87,7 +87,7 @@ class CustomUserListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['id', 'email', 'username','profile_picture','phone_number','date_of_birth' ]
+        fields = ['id', 'email', 'username','first_name','last_name','profile_picture','phone_number','date_of_birth' ]
         
 class EventRegistrationListSerializer(serializers.ModelSerializer):
     event=EventListSerializer()
