@@ -8,7 +8,7 @@ from authapp.utils.email_sender import send_email
 @receiver(post_save, sender=Event)
 def send_event_update_email(sender, instance, created, **kwargs):
     
-    if created:  # Ignore if event is newly created
+    if created:  
         return
 
     registered_users = EventRegistration.objects.filter(event=instance).select_related("user")
