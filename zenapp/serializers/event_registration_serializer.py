@@ -54,7 +54,7 @@ class EventRegistrationCreateSerializer(serializers.ModelSerializer):
                 to_email=user.email,
                 template_name="event-registration.html",
                 context={
-                    "user_name": user.email,
+                    "user_name": user.first_name + " " + user.last_name,
                     "event_title": event.title,
                     "event_start_date": event.start_date,
                     "event_end_date": event.end_date,
