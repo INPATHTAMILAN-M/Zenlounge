@@ -32,6 +32,7 @@ class UserSignupSerializer(serializers.ModelSerializer):
             "university",
             "department",
             "intrested_topics",  # keep typo to match model
+            "lable",
             "year_of_entry",
             "first_name",
             "last_name",
@@ -64,16 +65,16 @@ class UserSignupSerializer(serializers.ModelSerializer):
         subject = "Welcome! Your Student Registration is Confirmed – Next Steps Inside" if user.groups.filter(name__iexact="Student").exists() else "Welcome to the Alumni Community – Next Steps"
         send_email(subject=subject, to_email=user.email, template_name=template, context=context)
 
-    def validate_intrested_topics(self, value):
-        """
-        Accept list or comma-separated string, return as JSON string.
-        """
-        print (f"Validating interested topics: {value}")
-        if isinstance(value, list):
-            return json.dumps(value)
-        elif isinstance(value, str):
-            return json.dumps([t.strip() for t in value.split(",") if t.strip()])
-        return json.dumps([])
+    # def validate_intrested_topics(self, value):
+    #     """
+    #     Accept list or comma-separated string, return as JSON string.
+    #     """
+    #     print (f"Validating interested topics: {value}")
+    #     if isinstance(value, list):
+    #         return json.dumps(value)
+    #     elif isinstance(value, str):
+    #         return json.dumps([t.strip() for t in value.split(",") if t.strip()])
+    #     return json.dumps([])
 
     def create(self, validated_data):
         alumni = validated_data.pop("is_alumni", None)

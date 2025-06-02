@@ -39,27 +39,27 @@ class CustomUserCreateSerializer(serializers.ModelSerializer):
     groups = serializers.PrimaryKeyRelatedField(
         queryset=Group.objects.all(), many=True, required=False
     )
-    intrested_topics = serializers.JSONField(required=False)
+    # intrested_topics = serializers.JSONField(required=False)
 
     class Meta:
         model = CustomUser
         fields = [
-            'email', 'username', 'phone_number', 'address', 'date_of_birth',
+            'email', 'username', 'phone_number', 'address', 'date_of_birth',"lable",
             'university', 'intrested_topics', 'year_of_entry', 'profile_picture', 'country',
             'first_name', 'last_name','groups', 'department', 'work', 'year_of_graduation', 
             'is_open_to_be_mentor'
         ]
 
-    def validate_intrested_topics(self, value):
-        """
-        Accept list or comma-separated string, return as JSON string.
-        """
-        print (f"Validating interested topics: {value}")
-        if isinstance(value, list):
-            return json.dumps(value)
-        elif isinstance(value, str):
-            return json.dumps([t.strip() for t in value.split(",") if t.strip()])
-        return json.dumps([])
+    # def validate_intrested_topics(self, value):
+    #     """
+    #     Accept list or comma-separated string, return as JSON string.
+    #     """
+    #     print (f"Validating interested topics: {value}")
+    #     if isinstance(value, list):
+    #         return json.dumps(value)
+    #     elif isinstance(value, str):
+    #         return json.dumps([t.strip() for t in value.split(",") if t.strip()])
+    #     return json.dumps([])
 
     def create(self, validated_data):
         print(validated_data)
@@ -101,20 +101,20 @@ class CustomUserUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CustomUser
-        fields = ['id', 'email', 'username', 'phone_number', 'address', 'date_of_birth', 'first_name', 'last_name',
-                  'university', 'intrested_topics', 'year_of_entry', 'profile_picture','country',
+        fields = ['id', 'email', 'username', 'phone_number', 'address', 'date_of_birth', 'first_name', 'last_name',"lable",
+                  'university', 'intrested_topics', 'lable', 'year_of_entry', 'profile_picture','country',
                   'groups','department','work','year_of_graduation','is_open_to_be_mentor']
 
-    def validate_intrested_topics(self, value):
-        """
-        Accept list or comma-separated string, return as JSON string.
-        """
-        print(f"Validating interested topics: {value}")
-        if isinstance(value, list):
-            return json.dumps(value)
-        elif isinstance(value, str):
-            return json.dumps([t.strip() for t in value.split(",") if t.strip()])
-        return json.dumps([])
+    # def validate_intrested_topics(self, value):
+    #     """
+    #     Accept list or comma-separated string, return as JSON string.
+    #     """
+    #     print(f"Validating interested topics: {value}")
+    #     if isinstance(value, list):
+    #         return json.dumps(value)
+    #     elif isinstance(value, str):
+    #         return json.dumps([t.strip() for t in value.split(",") if t.strip()])
+    #     return json.dumps([])
 
     def update(self, instance, validated_data):
         groups = validated_data.pop('groups', instance.groups.all())
@@ -136,7 +136,7 @@ class CustomUserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = [
-            'id', 'email', 'username', 'phone_number', 'address', 'date_of_birth',
+            'id', 'email', 'username', 'phone_number', 'address', 'date_of_birth',"lable",
             'first_name','last_name','university', 'intrested_topics', 'year_of_entry', 
             'profile_picture','department', 'groups', 'event_registrations_count', 'date_joined',
             'country', 'work', 'year_of_graduation', 'is_open_to_be_mentor'
