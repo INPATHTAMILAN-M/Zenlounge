@@ -4,7 +4,6 @@ from django.contrib.auth.models import Group
 from ..models import Country, IntrestedTopic, University
 from zenapp.models import EventRegistration
 from authapp.utils.email_sender import send_email
-from django.contrib.auth.tokens import default_token_generator
 from django.conf import settings
 import random
 import string
@@ -46,42 +45,27 @@ class CustomUserCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = [
-            'email', 'username', 'phone_number', 'address', 'date_of_birth',"lable",
+            'email', 'username', 'phone_number', 'address', 'date_of_birth', "lable",
             'university', 'intrested_topics', 'year_of_entry', 'profile_picture', 'country',
-            'first_name', 'last_name','groups', 'department', 'work', 'year_of_graduation', 
+            'first_name', 'last_name', 'groups', 'department', 'work', 'year_of_graduation',
             'is_open_to_be_mentor'
         ]
 
-    # def validate_intrested_topics(self, value):
-    #     """
-    #     Accept list or comma-separated string, return as JSON string.
-    #     """
-    #     print (f"Validating interested topics: {value}")
-    #     if isinstance(value, list):
-    #         return json.dumps(value)
-    #     elif isinstance(value, str):
-    #         return json.dumps([t.strip() for t in value.split(",") if t.strip()])
-    #     return json.dumps([])
-
     def create(self, validated_data):
-        print(validated_data)
-        groups = validated_data.pop('groups', None) or []
-        intrested_topics = validated_data.pop('intrested_topics', None)
+        groups = validated_data.pop('groups', [])
+        intrested_topics = validated_data.pop('intrested_topics', [])
 
         password = ''.join(random.choices(string.ascii_letters + string.digits, k=6))
-        validated_data['password'] = password
-
         user = CustomUser.objects.create(**validated_data)
         user.set_password(password)
         user.save()
 
         if groups:
             user.groups.set(groups)
-
-        if intrested_topics is not None:
+        if intrested_topics:
             user.intrested_topics.set(intrested_topics)
 
-        is_alumni = any(group.name == 'Alumni' for group in user.groups.all())
+        is_alumni = user.groups.filter(name='Alumni').exists()
 
         if not is_alumni:
             reset_url = f"{settings.FRONTEND_URL}/login/"
@@ -90,7 +74,7 @@ class CustomUserCreateSerializer(serializers.ModelSerializer):
                 to_email=user.email,
                 template_name='welcome_email.html',
                 context={
-                    "username": user.first_name + " " + user.last_name,
+                    "username": f"{user.first_name} {user.last_name}",
                     "email": user.email,
                     "password": password,
                     "url": reset_url
@@ -104,34 +88,28 @@ class CustomUserUpdateSerializer(serializers.ModelSerializer):
     groups = serializers.PrimaryKeyRelatedField(
         queryset=Group.objects.all(), many=True, required=False
     )
+    intrested_topics = serializers.PrimaryKeyRelatedField(
+        queryset=IntrestedTopic.objects.all(), many=True, required=False
+    )
 
     class Meta:
         model = CustomUser
-        fields = ['id', 'email', 'username', 'phone_number', 'address', 'date_of_birth', 'first_name', 'last_name',"lable",
-                  'university', 'intrested_topics', 'lable', 'year_of_entry', 'profile_picture','country',
-                  'groups','department','work','year_of_graduation','is_open_to_be_mentor']
-
-    # def validate_intrested_topics(self, value):
-    #     """
-    #     Accept list or comma-separated string, return as JSON string.
-    #     """
-    #     print(f"Validating interested topics: {value}")
-    #     if isinstance(value, list):
-    #         return json.dumps(value)
-    #     elif isinstance(value, str):
-    #         return json.dumps([t.strip() for t in value.split(",") if t.strip()])
-    #     return json.dumps([])
+        fields = [
+            'id', 'email', 'username', 'phone_number', 'address', 'date_of_birth', 'first_name', 'last_name', "lable",
+            'university', 'intrested_topics', 'year_of_entry', 'profile_picture', 'country',
+            'groups', 'department', 'work', 'year_of_graduation', 'is_open_to_be_mentor'
+        ]
 
     def update(self, instance, validated_data):
         groups = validated_data.pop('groups', None)
         intrested_topics = validated_data.pop('intrested_topics', None)
-        
+
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
-        
+
         instance.save()
         if groups is not None:
-            instance.groups.set(groups)  # Assign groups
+            instance.groups.set(groups)
         if intrested_topics is not None:
             instance.intrested_topics.set(intrested_topics)
 
