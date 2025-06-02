@@ -39,7 +39,9 @@ class CustomUserCreateSerializer(serializers.ModelSerializer):
     groups = serializers.PrimaryKeyRelatedField(
         queryset=Group.objects.all(), many=True, required=False
     )
-    # intrested_topics = serializers.JSONField(required=False)
+    intrested_topics = serializers.PrimaryKeyRelatedField(
+        queryset=IntrestedTopic.objects.all(), many=True, required=False
+    )
 
     class Meta:
         model = CustomUser
@@ -121,14 +123,15 @@ class CustomUserUpdateSerializer(serializers.ModelSerializer):
     #     return json.dumps([])
 
     def update(self, instance, validated_data):
-        groups = validated_data.pop('groups', instance.groups.all())
+        groups = validated_data.pop('groups', None)
         intrested_topics = validated_data.pop('intrested_topics', None)
         
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         
         instance.save()
-        instance.groups.set(groups)  # Assign groups
+        if groups is not None:
+            instance.groups.set(groups)  # Assign groups
         if intrested_topics is not None:
             instance.intrested_topics.set(intrested_topics)
 
