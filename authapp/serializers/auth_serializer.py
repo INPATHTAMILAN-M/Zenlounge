@@ -19,6 +19,12 @@ class UserSignupSerializer(serializers.ModelSerializer):
         validators=[validate_password]
     )
     is_alumni = serializers.BooleanField(default=False)
+    intrested_topics = serializers.PrimaryKeyRelatedField(
+        many=True,
+        queryset=CustomUser._meta.get_field('intrested_topics').related_model.objects.all(),
+        required=False
+    )
+
     class Meta:
         model = CustomUser
         fields = [
@@ -57,30 +63,21 @@ class UserSignupSerializer(serializers.ModelSerializer):
             "emailaddress": user.email,
             "phonenumber": profile.phone_number or ' ',
             "mentor": "Yes" if profile.is_open_to_be_mentor else "No",
-            "interestedtopics": ', '.join(json.loads(profile.intrested_topics)) if profile.intrested_topics else ' ',
+            "interestedtopics": ', '.join([str(t) for t in profile.intrested_topics.all()]) if profile.intrested_topics.exists() else ' ',
             "university": profile.university.name if profile.university else ' ',
         }
         template = "student-registration.html" if user.groups.filter(name__iexact="Student").exists() else "alumni-registration.html"
         subject = "Welcome! Your Student Registration is Confirmed – Next Steps Inside" if user.groups.filter(name__iexact="Student").exists() else "Welcome to the Alumni Community – Next Steps"
         send_email(subject=subject, to_email=user.email, template_name=template, context=context)
 
-    # def validate_intrested_topics(self, value):
-    #     """
-    #     Accept list or comma-separated string, return as JSON string.
-    #     """
-    #     print (f"Validating interested topics: {value}")
-    #     if isinstance(value, list):
-    #         return json.dumps(value)
-    #     elif isinstance(value, str):
-    #         return json.dumps([t.strip() for t in value.split(",") if t.strip()])
-    #     return json.dumps([])
-
     def create(self, validated_data):
         alumni = validated_data.pop("is_alumni", None)
+        intrested_topics = validated_data.pop("intrested_topics", [])
 
-        # if not validated_data.get('password'):
-        #     validated_data['password'] = get_random_string()
         user = CustomUser.objects.create(**validated_data)
+
+        if intrested_topics:
+            user.intrested_topics.set(intrested_topics)
 
         group_name = "Alumni" if alumni else "Student"
         group, _ = Group.objects.get_or_create(name=group_name)
