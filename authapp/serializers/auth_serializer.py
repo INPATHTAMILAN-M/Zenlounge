@@ -19,7 +19,6 @@ class UserSignupSerializer(serializers.ModelSerializer):
         validators=[validate_password]
     )
     is_alumni = serializers.BooleanField(default=False)
-    intrested_topics = serializers.JSONField(required=False)
     class Meta:
         model = CustomUser
         fields = [
