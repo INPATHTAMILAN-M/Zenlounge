@@ -158,11 +158,12 @@ class CustomUserDetailSerializer(serializers.ModelSerializer):
     university = UniversitySerializer()
     country = CountrySerializer()
     group = serializers.SerializerMethodField() 
+    intrested_topics = IntrestedTopicSerializer(many=True, read_only=True)
 
     class Meta:
         model = CustomUser
         fields = [
-            'id', 'email', 'username', 'phone_number', 'address', 'date_of_birth', 'department',
+            'id', 'email', 'username', 'phone_number', 'address', 'date_of_birth', 'department','lable',
             'university', 'intrested_topics', 'year_of_entry', 'profile_picture','first_name','last_name',
             'groups', 'event_registrations', 'date_joined', 'country', 'group',
             'work', 'year_of_graduation', 'is_open_to_be_mentor'
