@@ -64,6 +64,7 @@ class CustomUserCreateSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         print(validated_data)
         groups = validated_data.pop('groups', None) or []
+        intrested_topics = validated_data.pop('intrested_topics', None)
 
         password = ''.join(random.choices(string.ascii_letters + string.digits, k=6))
         validated_data['password'] = password
@@ -74,6 +75,9 @@ class CustomUserCreateSerializer(serializers.ModelSerializer):
 
         if groups:
             user.groups.set(groups)
+
+        if intrested_topics is not None:
+            user.intrested_topics.set(intrested_topics)
 
         is_alumni = any(group.name == 'Alumni' for group in user.groups.all())
 
@@ -118,20 +122,33 @@ class CustomUserUpdateSerializer(serializers.ModelSerializer):
 
     def update(self, instance, validated_data):
         groups = validated_data.pop('groups', instance.groups.all())
+        intrested_topics = validated_data.pop('intrested_topics', None)
         
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         
         instance.save()
         instance.groups.set(groups)  # Assign groups
+        if intrested_topics is not None:
+            instance.intrested_topics.set(intrested_topics)
 
         return instance
+
+from rest_framework import serializers
+from authapp.models import IntrestedTopic
+
+class IntrestedTopicSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = IntrestedTopic
+        fields = '__all__'
+
 
 class CustomUserListSerializer(serializers.ModelSerializer):
     groups = serializers.StringRelatedField(many=True)
     event_registrations_count = serializers.SerializerMethodField()
     university = UniversitySerializer()
     country = CountrySerializer()
+    intrested_topics = IntrestedTopicSerializer(many=True, read_only=True)
 
     class Meta:
         model = CustomUser
@@ -144,14 +161,16 @@ class CustomUserListSerializer(serializers.ModelSerializer):
 
     def get_event_registrations_count(self, obj):
         return obj.event_registrations.count()
+    
 
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        try:
-            data['intrested_topics'] = json.loads(data['intrested_topics']) if data['intrested_topics'] else []
-        except (TypeError, json.JSONDecodeError):
-            data['intrested_topics'] = []
-        return data
+
+    # def to_representation(self, instance):
+    #     data = super().to_representation(instance)
+    #     try:
+    #         data['intrested_topics'] = json.loads(data['intrested_topics']) if data['intrested_topics'] else []
+    #     except (TypeError, json.JSONDecodeError):
+    #         data['intrested_topics'] = []
+    #     return data
 
 class CustomUserDetailSerializer(serializers.ModelSerializer):
     event_registrations = EveventRegistrationSerializer(many=True, read_only=True)
