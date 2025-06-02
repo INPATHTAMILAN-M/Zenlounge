@@ -175,10 +175,4 @@ class CustomUserDetailSerializer(serializers.ModelSerializer):
             return {'id': group.id, 'name': group.name}
         return None
 
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        try:
-            data['intrested_topics'] = json.loads(data['intrested_topics']) if data['intrested_topics'] else []
-        except (TypeError, json.JSONDecodeError):
-            data['intrested_topics'] = []
-        return data
+    
