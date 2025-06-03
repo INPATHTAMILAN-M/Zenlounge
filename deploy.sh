@@ -16,6 +16,10 @@ sudo systemctl daemon-reload || { echo "Failed to restart daemon. Exiting."; exi
 echo "Restarting Celery..."
 sudo systemctl restart celery || { echo "Failed to restart celery. Exiting."; exit 1; }
 
+# Restart celery beat
+echo "Restarting Celery Beat..."
+sudo systemctl restart celery-beat || { echo "Failed to restart celery beat. Exiting."; exit 1; }
+
 # Restart the Nginx service
 echo "Restarting Nginx..."
 sudo systemctl restart nginx || { echo "Failed to restart Nginx. Exiting."; exit 1; }
