@@ -6,4 +6,5 @@ class ZenappConfig(AppConfig):
     name = 'zenapp'
 
     def ready(self):
-        import zenapp.signals.event_update_signal
+        # import zenapp.signals.event_update_signal
+        import zenapp.signals.event_reminder_signal

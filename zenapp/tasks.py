@@ -3,9 +3,15 @@ from dotenv import load_dotenv
 from mailjet_rest import Client
 from celery import shared_task
 from django.core.paginator import Paginator
+from django.core.mail import send_mail
 from django.template.loader import render_to_string
+from django.utils import timezone
+
 from authapp.models import CustomUser
 from zenapp.models import Event
+from .models import EventRegistration
+from django.conf import settings
+
 
 load_dotenv()
 
@@ -54,3 +60,33 @@ def send_bulk_mailjet_emails(user_ids: list[int], event_id: int):
                 print(f"Batch {page_num}: {response.status_code}")
             except Exception as e:
                 print(f"Error sending batch {page_num}: {str(e)}")
+
+
+
+
+@shared_task
+def send_event_reminder(event_id):
+    try:
+        event = Event.objects.get(id=event_id)
+        registrations = EventRegistration.objects.filter(event=event)
+
+        for registration in registrations:
+            user = registration.user
+            print(f"Sending reminder to {user.email} for event {event.title}")
+            
+            if user.email:
+                html_message = render_to_string("event_reminder.html", {
+                    "user": user,
+                    "event": event
+                })
+
+                send_mail(
+                    subject=f"Reminder: Upcoming Event - {event.title}",
+                    message="This is a reminder for your upcoming event.",
+                    from_email=settings.DEFAULT_FROM_EMAIL,
+                    recipient_list=[user.email],
+                    html_message=html_message,
+                    fail_silently=True
+                )
+    except Event.DoesNotExist:
+        pass

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Event Reminder</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .card-header {
+            background: linear-gradient(90deg, #0d6efd 60%, #0a58ca 100%);
+        }
+        .event-title {
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-7 col-lg-6">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header text-white">
+                        <h3 class="mb-0">Event Reminder</h3>
+                    </div>
+                    <div class="card-body">
+                        <p class="fs-5 mb-1">Dear <strong>{{ user.first_name }}</strong>,</p>
+                        <p class="mb-3">This is a friendly reminder about your upcoming event. Please find the details below:</p>
+                        <h4 class="mb-3 text-primary event-title">{{ event.title }}</h4>
+                        <ul class="list-group mb-4">
+                            <li class="list-group-item">
+                                <strong>Date:</strong> {{ event.start_date }}
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Time:</strong> {{ event.start_time }} – {{ event.end_time }}
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Location:</strong>
+                                {% if event.session_link %}
+                                    <a href="{{ event.session_link }}" target="_blank">{{ event.session_link }}</a>
+                                {% else %}
+                                    Online
+                                {% endif %}
+                            </li>
+                        </ul>
+                        <p class="mb-2">Should you have any questions or require further assistance, please do not hesitate to contact us.</p>
+                        <p class="text-end text-muted mb-0">Best regards,<br>ZenLounge Team</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
