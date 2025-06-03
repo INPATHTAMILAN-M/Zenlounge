@@ -12,8 +12,13 @@ sudo systemctl restart zenlounge || { echo "Failed to restart zenlounge. Exiting
 echo "Restarting the daemon service..."
 sudo systemctl daemon-reload || { echo "Failed to restart daemon. Exiting."; exit 1; }
 
+# Restart celery 
+echo "Restarting Celery..."
+sudo systemctl restart celery || { echo "Failed to restart celery. Exiting."; exit 1; }
+
 # Restart the Nginx service
 echo "Restarting Nginx..."
 sudo systemctl restart nginx || { echo "Failed to restart Nginx. Exiting."; exit 1; }
+
 
 echo "All services restarted successfully!"
