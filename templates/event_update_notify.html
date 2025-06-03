@@ -19,11 +19,11 @@
             box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
         }
         .header {
-            background-color: #007bff;
+            background-color: #7f4099;
             color: white;
             text-align: center;
-            padding: 10px;
-            font-size: 20px;
+            padding: 15px;
+            font-size: 22px;
             border-radius: 8px 8px 0 0;
         }
         .content {
@@ -32,11 +32,17 @@
             font-size: 16px;
             line-height: 1.5;
         }
+        .details {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
         .btn {
             display: inline-block;
             padding: 10px 20px;
-            margin-top: 15px;
-            background-color: #007bff;
+            margin-top: 10px;
+            background-color: #7f4099;
             color: white;
             text-decoration: none;
             border-radius: 5px;
@@ -57,18 +63,23 @@
         </div>
         <div class="content">
             <p>Dear {{ user_name }},</p>
-            <p>The event <strong>{{ event_title }}</strong> has been updated. Please check the latest details below:</p>
-            <p>
-                📅 <strong>Date:</strong> {{ event_start_date }} to {{ event_end_date }} <br>
-                🕒 <strong>Time:</strong> {{ event_start_time }} - {{ event_end_time }} <br>
-                📍 <strong>Session Link:</strong> {{ event_link }}
-            </p>
-            <!-- <p>For more details, please visit the event page.</p>
-            <a href="https://filez.zenwellnesslounge.com/" class="btn">View Event</a> -->
+            <p>The event <strong>{{ event_title }} </strong>has been updated. Please check the latest details below:
+        </p>
+            <div class="details">
+                <p><strong>📅 Event Dates:</strong> {{ event_start_date }} - {{ event_end_date }}</p>
+                <p><strong>🕒 Time:</strong> {{ event_start_time }} - {{ event_end_time }}</p>
+                <p><strong>📍 Location:</strong> {{ event_location }}</p>
+                <p><strong>🆔 Registration ID:</strong> {{ registration_id }}</p>
+                <p><strong>✅ Status:</strong> {{ registration_status }}</p>
+            </div>
+            <p>For additional information or updates regarding the event, please click the link below:</p>
+            <a href="{{ event_link }}" class="btn">View Event</a>
+
         </div>
+        
         <div class="footer">
-            Thank you,<br>
-            <strong>Event Team</strong><br>
+            Best regards, <br>
+            <strong>Event Coordination Team</strong> <br>
             <a href="https://filez.zenwellnesslounge.com/">Visit Website</a>
         </div>
     </div>
