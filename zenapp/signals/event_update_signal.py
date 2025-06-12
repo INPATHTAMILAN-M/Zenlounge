@@ -27,7 +27,7 @@ def send_event_update_email(sender, instance:Event, created, **kwargs):
             "event_end_date": instance.end_date,
             "event_start_time": instance.start_time,
             "event_end_time": instance.end_time,
-            "registration_id": registration.id,
+            "registration_id": registration.registration_id,
             "registration_status": registration.registration_status,
             "event_location": "Online",
             "event_link": instance.session_link
