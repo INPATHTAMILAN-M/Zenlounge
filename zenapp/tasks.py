@@ -35,7 +35,7 @@ def send_bulk_mailjet_emails(user_ids: list[int], event_id: int):
         messages = []
 
         for user in paginator.page(page_num).object_list:
-            html_content = render_to_string("event_update_notify.html", {
+            html_content = render_to_string("event_reminder.html", {
                 "user_name": user.email,
                 "event_title": event.title,
                 "event_start_date": event.start_date,
@@ -77,6 +77,7 @@ def send_event_reminder(event_id):
             if user.email:
                 html_message = render_to_string("event_reminder.html", {
                     "user": user,
+                    "user_name": user.first_name or user.last_name,
                     "event": event
                 })
 
