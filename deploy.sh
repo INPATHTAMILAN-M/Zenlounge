@@ -21,3 +21,4 @@ echo "🔁 Restarting Nginx..."
 sudo systemctl restart nginx || { echo "❌ Failed to restart Nginx. Exiting."; exit 1; }
 
 echo "✅ All services restarted successfully!"
+

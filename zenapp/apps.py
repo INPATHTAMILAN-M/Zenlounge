@@ -8,3 +8,4 @@ class ZenappConfig(AppConfig):
     def ready(self):
         # import zenapp.signals.event_update_signal
         import zenapp.signals.event_reminder_signal
+        import zenapp.signals.event_update_signal
