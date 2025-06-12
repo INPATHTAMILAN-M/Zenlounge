@@ -21,12 +21,14 @@ def send_event_update_email(sender, instance, created, **kwargs):
 
         # Render the email template with dynamic content
         content = {
-            "user_name": user.email,
+            "user_name": user.first_name + " " + user.last_name,
             "event_title": instance.title,
             "event_start_date": instance.start_date,
             "event_end_date": instance.end_date,
             "event_start_time": instance.start_time,
             "event_end_time": instance.end_time,
+            "registration_id": registration.id,
+            "registration_status": registration.status,
             "event_location": "Online",
             "event_link": instance.session_link
             

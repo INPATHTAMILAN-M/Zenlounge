@@ -98,7 +98,7 @@ class PasswordResetRequestView(APIView):
                 subject="Reset Your Password",
                 to_email=user.email,
                 template_name='password_reset.html',
-                context={"url": reset_url},
+                context={"url": reset_url,"user_name": user.first_name or user.last_name},
             )
 
             return Response({"message": "Password reset link sent to your email."}, status=status.HTTP_200_OK)
@@ -131,7 +131,7 @@ class PasswordResetConfirmView(APIView):
                 subject="Password Reset Successful",
                 to_email=user.email,
                 template_name='password_reset_confirm.html',
-                context={"login_url": login_url},
+                context={"login_url": login_url,"user_name": user.first_name or user.last_name},
             )
 
             return Response({"message": "Password has been reset successfully."}, status=status.HTTP_200_OK)
