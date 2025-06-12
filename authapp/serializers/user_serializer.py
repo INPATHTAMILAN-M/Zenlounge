@@ -74,7 +74,7 @@ class CustomUserCreateSerializer(serializers.ModelSerializer):
                 to_email=user.email,
                 template_name='welcome_email.html',
                 context={
-                    "username": f"{user.first_name} {user.last_name}",
+                    "user_name": f"{user.first_name} {user.last_name}",
                     "email": user.email,
                     "password": password,
                     "url": reset_url
