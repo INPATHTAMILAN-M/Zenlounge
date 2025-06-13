@@ -8,7 +8,6 @@ __pycache__/
 *.pot
 *.py[cod]
 *.egg-info/
-__init__.py
 # db.sqlite3
 /staticfiles/
 media/

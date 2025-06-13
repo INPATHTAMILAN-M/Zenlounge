@@ -27,6 +27,8 @@ def schedule_event_reminder(sender, instance, created, **kwargs):
             # Send task to Celery
             send_event_reminder.apply_async((instance.id,), eta=reminder_time)
             logger.info(f"Scheduled reminder for event {instance.id} at {reminder_time}")
+            print(f"Scheduled reminder for event {instance.id} at {reminder_time}")
 
         except OperationalError as e:
+            print("Could not schedule reminder for event")
             logger.warning(f"Could not schedule reminder for event {instance.id}: {e}")

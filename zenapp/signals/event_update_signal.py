@@ -6,7 +6,7 @@ from authapp.utils.email_sender import send_email
 
 
 @receiver(post_save, sender=Event)
-def send_event_update_email(sender, instance, created, **kwargs):
+def send_event_update_email(sender, instance:Event, created, **kwargs):
     
     if created:  
         return
@@ -27,8 +27,8 @@ def send_event_update_email(sender, instance, created, **kwargs):
             "event_end_date": instance.end_date,
             "event_start_time": instance.start_time,
             "event_end_time": instance.end_time,
-            "registration_id": registration.id,
-            "registration_status": registration.status,
+            "registration_id": registration.registration_id,
+            "registration_status": registration.registration_status,
             "event_location": "Online",
             "event_link": instance.session_link
             
