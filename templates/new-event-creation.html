@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Password Reset Successful</title>
+    <title>New Event Creation</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -59,33 +59,41 @@
 <body>
     <div class="container">
         <div class="header">
-           Password Reset Successful
+            Event Creation Notification
         </div>
         <div class="content">
             <p>Dear {{ user_name }},</p>
-            <p>Your password has been successfully reset. You can now log in to your Zen Wellness account using your new credentials.
+            <p>We're excited to share that a new session <strong>{{ event_title }} </strong> has just been launched under the   <strong>
+                {{ event_category }} </strong> category at Zen Wellness. Scheduled for <strong>{{ event_start_date }} </strong>, this session is now open for enrollment. 
+
+
         </p>
+            <div class="details">
+                <p><strong>📅 Event Dates:</strong> {{ event_start_date }} - {{ event_end_date }}</p>
+                <p><strong>🕒 Time:</strong> {{ event_start_time }} - {{ event_end_time }}</p>
+                <p><strong>📍 Location:</strong> {{ event_location }}</p>
+                
+            </div>
+            <p>Visit your dashboard to view the session details, reserve your spot, and continue your journey toward holistic well-being. We look forward to having you join us.</p>
            
-           
-            <a href="{{ login_url }}" class="btn" style="display: inline-block;
+            <a href="{{ event_link }}" class="btn" style="display: inline-block;
           padding: 10px 20px;
-          margin-top: 0px;
+          margin-top: 10px;
           background-color: #7f4099;
           color: #ffffff !important;
           text-decoration: none;
           border-radius: 5px;
           font-weight: bold;
-          font-family: Arial, sans-serif;">Go to Login</a>
-            <p>If you did not perform this action, please contact us immediately at <a target="_blank" style="color: #7A3596;" href="mailto:viji.zenwellnesslounge@gmail.com">viji.zenwellnesslounge@gmail.com</a>  to secure your account.
+          font-family: Arial, sans-serif;" >View Event</a>
+
+          <p>Thank you for your continued participation in Zen Wellness. We look forward to supporting your journey.
 </p>
 
-<p>Thank you for being part of the Zen Wellness community.
-</p>
         </div>
         
         <div class="footer">
-            Best regards, <br>
-            <strong>Team Zen Wellness</strong> <br>
+            Warm regards, <br>
+            <strong>Team Zen Wellness </strong> <br>
             <a href="https://filez.zenwellnesslounge.com/">Visit Website</a>
         </div>
     </div>
