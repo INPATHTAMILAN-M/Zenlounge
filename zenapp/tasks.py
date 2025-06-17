@@ -11,6 +11,7 @@ from authapp.models import CustomUser
 from zenapp.models import Event
 from .models import EventRegistration
 from django.conf import settings
+from authapp.utils.email_sender import send_email
 
 
 load_dotenv()
@@ -91,3 +92,34 @@ def send_event_reminder(event_id):
                 )
     except Event.DoesNotExist:
         pass
+
+
+@shared_task
+def send_event_creation_emails_task(event_id):
+    from zenapp.models import Event 
+    from authapp.models import CustomUser
+
+    try:
+        event = Event.objects.get(id=event_id)
+    except Event.DoesNotExist:
+        return
+
+    registered_users = CustomUser.objects.all()
+    if not registered_users.exists():
+        return
+
+    for user in registered_users:
+        content = {
+            "user_name": f"{user.first_name} {user.last_name}",
+            "event_title": event.title,
+            "event_start_date": event.start_date,
+            "event_end_date": event.end_date,
+            "event_start_time": event.start_time,
+            "event_end_time": event.end_time,
+            "event_category": event.lounge_type.name,
+            "event_location": "Online",
+            "event_link": event.session_link
+        }
+        template = "new-event-creation.html"
+        print(f"Sending event creation email to {user.email}")
+        send_email("Event Created", user.email, template, content)
