@@ -16,9 +16,8 @@ def send_event_creation_email(sender, instance:Event, created, **kwargs):
     if not registered_users.exists():
         return
 
-    for registration in registered_users:
-        user = registration.user
-
+    for user in registered_users:
+        
         # Render the email template with dynamic content
         content = {
             "user_name": user.first_name + " " + user.last_name,
